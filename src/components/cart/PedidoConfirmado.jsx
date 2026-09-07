@@ -27,10 +27,10 @@ function CopyField({ label, value, copyText = "Copiar", mono = false }) {
   };
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-gray-50/60 p-3">
+    <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3">
       <div className="flex items-center justify-between gap-3">
         <p
-          className={`select-all break-all text-base font-bold text-gray-900 ${
+          className={`select-all break-all text-base font-bold text-[var(--color-texto)] ${
             mono ? "font-mono" : ""
           }`}
         >
@@ -42,14 +42,14 @@ function CopyField({ label, value, copyText = "Copiar", mono = false }) {
           className={`flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold shadow-sm transition-all active:scale-95 ${
             copied
               ? "bg-green-100 text-green-700 shadow-none"
-              : "text-white hover:opacity-90"
+              : "text-[var(--color-primary-texto)] hover:opacity-90"
           }`}
           style={copied ? undefined : { background: "var(--color-primary)" }}
         >
           {copied ? "✓ Copiado" : `⧉ ${copyText}`}
         </button>
       </div>
-      <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+      <p className="mt-1 text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
         {label}
       </p>
     </div>
@@ -72,13 +72,13 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
 
   return (
     <div className="flex flex-1 flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3.5">
-        <h2 className="font-display text-lg font-semibold tracking-tight text-gray-900">
+      <header className="flex shrink-0 items-center justify-between border-b border-[var(--color-borde)] px-4 py-3.5">
+        <h2 className="font-display text-lg font-semibold tracking-tight text-[var(--color-texto)]">
           Pedido registrado
         </h2>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-secondary)] transition-colors hover:bg-gray-100 hover:text-[var(--color-texto)]"
           aria-label="Cerrar carrito"
         >
           ✕
@@ -91,43 +91,43 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
         </span>
 
         <div>
-          <p className="font-display text-lg font-semibold text-gray-900">
+          <p className="font-display text-lg font-semibold text-[var(--color-texto)]">
             ¡Gracias {cliente.nombre.split(" ")[0]}!
           </p>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-[var(--color-secondary)]">
             Tu pedido quedó registrado. Número{" "}
-            <span className="font-bold text-gray-900">
+            <span className="font-bold text-[var(--color-texto)]">
               {shortOrderId(pedido.id)}
             </span>
           </p>
-          <p className="mt-1 text-xs font-medium text-gray-500">
-            Pagás <span className="text-gray-900">{metodoLabel.toLowerCase()}</span>
+          <p className="mt-1 text-xs font-medium text-[var(--color-secondary)]">
+            Pagás <span className="text-[var(--color-texto)]">{metodoLabel.toLowerCase()}</span>
           </p>
         </div>
 
-        <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-4 text-left">
-          <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+        <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4 text-left">
+          <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
             Resumen
           </p>
           <ul className="mt-2 space-y-1.5">
             {items.map((i) => (
               <li key={`${i.producto_id}${i.talle || ""}`} className="flex justify-between gap-3 text-sm">
-                <span className="truncate text-gray-700">
+                <span className="truncate text-[var(--color-texto)]">
                   {i.nombre}
                   {i.talle && (
-                    <span className="text-gray-400"> · Talle {i.talle}</span>
+                    <span className="text-[var(--color-secondary)]"> · Talle {i.talle}</span>
                   )}{" "}
-                  <span className="text-gray-400">x{i.cantidad}</span>
+                  <span className="text-[var(--color-secondary)]">x{i.cantidad}</span>
                 </span>
-                <span className="shrink-0 font-semibold tabular-nums text-gray-900">
+                <span className="shrink-0 font-semibold tabular-nums text-[var(--color-texto)]">
                   {formatPrice(i.precio_unitario * i.cantidad)}
                 </span>
               </li>
             ))}
           </ul>
-          <div className="mt-2 flex justify-between gap-3 border-t border-gray-200 pt-2 text-sm">
-            <span className="font-medium text-gray-700">Total</span>
-            <span className="font-bold tabular-nums text-gray-900">
+          <div className="mt-2 flex justify-between gap-3 border-t border-[var(--color-borde)] pt-2 text-sm">
+            <span className="font-medium text-[var(--color-texto)]">Total</span>
+            <span className="font-bold tabular-nums text-[var(--color-texto)]">
               {formatPrice(subtotal)}
             </span>
           </div>
@@ -135,7 +135,7 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
 
         {metodoPago === "transferencia" && (
           <div
-            className="overflow-hidden rounded-2xl bg-white text-left shadow-sm ring-1 ring-gray-200"
+            className="overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] text-left shadow-sm ring-1 ring-[var(--color-borde)]"
             style={{ borderTop: "4px solid var(--color-primary)" }}
           >
             <div className="flex items-center gap-2.5 p-4 pb-0">
@@ -143,12 +143,12 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
                 💸
               </span>
               <div>
-                <p className="text-sm font-bold text-gray-900">
+                <p className="text-sm font-bold text-[var(--color-texto)]">
                   Transferí tu pedido
                 </p>
-                <p className="text-xs text-gray-500">
+                <p className="text-xs text-[var(--color-secondary)]">
                   Total a transferir:{" "}
-                  <span className="font-bold tabular-nums text-gray-900">
+                  <span className="font-bold tabular-nums text-[var(--color-texto)]">
                     {formatPrice(subtotal)}
                   </span>
                 </p>
@@ -174,14 +174,14 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
                 )}
               </div>
             ) : (
-              <p className="px-4 pb-4 pt-2 text-xs text-gray-500">
+              <p className="px-4 pb-4 pt-2 text-xs text-[var(--color-secondary)]">
                 El negocio todavía no configuró los datos de transferencia. Podés
                 coordinar por WhatsApp.
               </p>
             )}
 
-            <div className="border-t border-gray-100 bg-gray-50/70 px-4 py-2.5">
-              <p className="text-[11px] font-medium text-gray-500">
+            <div className="border-t border-[var(--color-borde)] surface-soft px-4 py-2.5">
+              <p className="text-[11px] font-medium text-[var(--color-secondary)]">
                 📌 Guardá el comprobante y adjuntalo cuando envíes tu pedido por
                 WhatsApp.
               </p>
@@ -194,33 +194,33 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
             href={link}
             target="_blank"
             rel="noreferrer"
-            className="flex w-full items-center justify-center gap-2 rounded-xl py-3 text-sm font-bold text-white transition-all hover:opacity-90 active:scale-[0.99]"
+            className="flex w-full items-center justify-center gap-2 rounded-[var(--radio)] py-3 text-sm font-bold text-[var(--color-primary-texto)] transition-all hover:opacity-90 active:scale-[0.99]"
             style={{ background: "var(--color-primary)" }}
           >
             Enviar pedido por WhatsApp
           </a>
         ) : (
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[var(--color-secondary)]">
             El negocio todavía no configuró WhatsApp para recibir pedidos.
           </p>
         )}
 
         {link && metodoPago === "transferencia" && (
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[var(--color-secondary)]">
             En el chat, adjuntá el comprobante de la transferencia.
           </p>
         )}
 
         {telefono && (
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-[var(--color-secondary)]">
             O compartí el comprobante directo a{" "}
-            <span className="font-semibold text-gray-500">
+            <span className="font-semibold text-[var(--color-texto)]">
               {displayPhone(telefono)}
             </span>
           </p>
         )}
 
-        <p className="text-xs text-gray-400">
+        <p className="text-xs text-[var(--color-secondary)]">
           Nuestro equipo va a confirmar tu pedido.
         </p>
       </div>

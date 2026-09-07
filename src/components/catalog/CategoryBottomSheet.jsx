@@ -10,6 +10,7 @@ export default function CategoryBottomSheet({
   categorias,
   activeCategoryId,
   settings,
+  theme,
 }) {
   const [query, setQuery] = useState("");
   const contentRef = useRef(null);
@@ -136,26 +137,26 @@ export default function CategoryBottomSheet({
 
       <div
         ref={contentRef}
-        style={sheetStyle}
-        className="relative flex-1 flex flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl"
+        style={{ ...theme?.vars, ...sheetStyle }}
+        className="relative flex-1 flex flex-col overflow-hidden rounded-t-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onClick={(e) => e.stopPropagation()}
       >
-        <div data-handle className="flex shrink-0 items-center justify-between px-4 py-3 border-b border-gray-100">
+        <div data-handle className="flex shrink-0 items-center justify-between px-4 py-3 border-b border-[var(--color-borde)]">
           <div className="flex items-center gap-3">
-            <div className="h-1 w-12 rounded-full bg-gray-300" />
-            <h2 className="text-base font-semibold text-gray-900">Categorías</h2>
+            <div className="h-1 w-12 rounded-full bg-[var(--color-borde)]" />
+            <h2 className="text-base font-semibold text-[var(--color-texto)]">Categorías</h2>
             {query && (
-              <span className="text-[11px] font-medium text-gray-500 px-2 py-0.5 rounded-full bg-gray-100">
+              <span className="text-[11px] font-medium text-[var(--color-secondary)] px-2 py-0.5 rounded-full surface-soft">
                 {filtered.length} resultados
               </span>
             )}
           </div>
           <button
             onClick={handleClose}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900 active:scale-95"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[var(--color-secondary)] transition-colors hover:bg-gray-100 hover:text-[var(--color-texto)] active:scale-95"
             aria-label="Cerrar"
           >
             <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
@@ -180,13 +181,13 @@ export default function CategoryBottomSheet({
 
         {settings && (
           <div className="shrink-0 sticky bottom-0 z-10" aria-hidden="false">
-            <div className="relative bg-white/95 backdrop-blur-sm shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]">
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gray-300/60 to-transparent" />
+            <div className="relative bg-[var(--color-tarjeta)]/95 backdrop-blur-sm shadow-[0_-4px_20px_-4px_rgba(0,0,0,0.08)]">
+              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[var(--color-borde)] to-transparent" />
               <div className="p-4 pb-safe">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400 mb-3 flex items-center gap-2">
-                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300/40 to-transparent" />
+                <p className="text-[11px] font-semibold uppercase tracking-[0.15em] text-[var(--color-secondary)] mb-3 flex items-center gap-2">
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--color-borde)] to-transparent" />
                   Síguenos
-                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-gray-300/40 to-transparent" />
+                  <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--color-borde)] to-transparent" />
                 </p>
                 <SocialLinks settings={settings} variant="mobile" className="justify-center gap-3" />
               </div>

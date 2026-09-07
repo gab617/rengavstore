@@ -34,11 +34,11 @@ export default function FeaturedCard({ p, onOpen, onSeeCategory, theme }) {
 
   return (
     <>
-      <article className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-gray-100 ring-1 ring-black/5 shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gray-900/15">
+      <article className="group relative aspect-[4/5] w-full overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] ring-1 ring-[var(--color-borde)] shadow-sm transition-all duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-gray-900/15">
         {canAdd(p) && (
           <button
             onClick={handleAddToCart}
-            className="absolute right-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full shadow-md backdrop-blur-sm transition-all hover:scale-110 active:scale-95"
+            className="absolute right-2.5 top-2.5 z-10 flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-primary-texto)] shadow-md backdrop-blur-sm transition-all hover:scale-110 active:scale-95"
             aria-label={hasSizes ? "Elegir talle y agregar" : "Agregar al carrito"}
             style={{
               background: `linear-gradient(135deg, ${primary} 0%, color-mix(in srgb, ${primary} 70%, #0f172a) 100%)`,
@@ -46,11 +46,11 @@ export default function FeaturedCard({ p, onOpen, onSeeCategory, theme }) {
             }}
           >
             {added ? (
-              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M20 6L9 17l-5-5" />
               </svg>
             ) : (
-              <svg className="h-5 w-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="9" cy="21" r="1" />
                 <circle cx="20" cy="21" r="1" />
                 <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
@@ -74,9 +74,9 @@ export default function FeaturedCard({ p, onOpen, onSeeCategory, theme }) {
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
             />
           ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-gray-100 to-gray-50">
+            <div className="flex h-full w-full items-center justify-center bg-[var(--color-tarjeta)]">
               <svg
-                className="h-10 w-10 text-gray-300"
+                className="h-10 w-10 text-[var(--color-borde)] opacity-50"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -123,7 +123,7 @@ export default function FeaturedCard({ p, onOpen, onSeeCategory, theme }) {
       </article>
 
       {showSizePicker && (
-        <SizePickerModal p={p} onClose={() => setShowSizePicker(false)} />
+        <SizePickerModal p={p} theme={theme} onClose={() => setShowSizePicker(false)} />
       )}
     </>
   );

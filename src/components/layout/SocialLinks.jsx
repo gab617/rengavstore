@@ -142,6 +142,13 @@ export function SocialLinks({ settings, variant = "default", className = "" }) {
     footer: "flex gap-3",
   };
 
+  const chipCls = {
+    mobile: "text-[var(--color-texto)] bg-[var(--color-tarjeta)]/90 backdrop-blur-sm shadow-sm",
+    header: "text-[var(--color-primary-texto)] bg-white/10 hover:bg-white/20",
+    footer: "text-[var(--color-secondary)] hover:text-[var(--color-texto)]",
+    default: "text-[var(--color-texto)] surface-soft hover:bg-gray-200/40",
+  };
+
   return (
     <nav className={`${baseStyles} ${variantStyles[variant] || variantStyles.default} ${className}`} aria-label="Redes sociales">
       {links.map((link) => (
@@ -151,7 +158,7 @@ export function SocialLinks({ settings, variant = "default", className = "" }) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label={link.label}
-          className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all hover:scale-110 active:scale-95 text-gray-600 hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 ${variant === "mobile" ? "bg-white/90 backdrop-blur-sm shadow-sm" : variant === "header" ? "bg-white/10 hover:bg-white/20 text-white" : variant === "footer" ? "text-gray-400 hover:text-gray-600" : "bg-gray-100 hover:bg-gray-200"}`}
+          className={`flex h-9 w-9 items-center justify-center rounded-xl transition-all hover:scale-110 active:scale-95 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-offset-2 ${chipCls[variant] || chipCls.default}`}
         >
           {link.icon}
         </a>

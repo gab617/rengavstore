@@ -17,10 +17,10 @@ export default function CategorySearch({
   if (!categorias?.length) {
     return (
       <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <svg className="h-12 w-12 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <svg className="h-12 w-12 text-[var(--color-borde)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
           <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
         </svg>
-        <p className="mt-3 text-sm font-medium text-gray-500">
+        <p className="mt-3 text-sm font-medium text-[var(--color-secondary)]">
           {query ? "Sin coincidencias" : "No hay categorías"}
         </p>
       </div>
@@ -29,9 +29,9 @@ export default function CategorySearch({
 
   return (
     <div className="flex flex-col">
-      <div className="relative px-4 py-3 sticky top-0 z-10 bg-white/95 backdrop-blur-sm border-b border-gray-100">
+      <div className="relative px-4 py-3 sticky top-0 z-10 bg-[var(--color-tarjeta)]/95 backdrop-blur-sm border-b border-[var(--color-borde)]">
         <label className="relative flex-1" htmlFor="cat-search">
-          <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[var(--color-secondary)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
             <circle cx="11" cy="11" r="8" />
             <path d="M21 21l-4.35-4.35" />
           </svg>
@@ -42,13 +42,13 @@ export default function CategorySearch({
             value={query}
             onChange={(e) => onChange(e.target.value)}
             placeholder="Buscar categoría..."
-            className="w-full h-10 pl-10 pr-12 rounded-xl bg-gray-50 border border-gray-200 text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
+            className="w-full h-10 pl-10 pr-12 rounded-[var(--radio)] surface-soft border border-[var(--color-borde)] text-sm text-[var(--color-texto)] placeholder:text-[var(--color-secondary)] focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent transition-all"
             autoComplete="off"
           />
           {query && (
             <button
               onClick={() => onChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors"
+              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 text-[var(--color-secondary)] hover:text-[var(--color-texto)] hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Limpiar búsqueda"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
@@ -60,7 +60,7 @@ export default function CategorySearch({
         </label>
       </div>
 
-      <ul className="flex-1 overflow-y-auto divide-y divide-gray-100" role="listbox" aria-label="Categorías">
+      <ul className="flex-1 overflow-y-auto divide-y divide-[var(--color-borde)]" role="listbox" aria-label="Categorías">
         {categorias.map((cat) => {
           const isActive = activeCategoryId === cat.id;
           return (
@@ -70,7 +70,7 @@ export default function CategorySearch({
                 className={`w-full flex items-center gap-3 px-4 py-3.5 transition-colors focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:ring-inset ${
                   isActive
                     ? "bg-[var(--color-primary)]/5 text-[var(--color-primary)]"
-                    : "hover:bg-gray-50"
+                    : "hover:surface-soft"
                 }`}
                 role="option"
                 aria-selected={isActive}
@@ -79,18 +79,18 @@ export default function CategorySearch({
                   <img
                     src={publicUrl(cat.imagen)}
                     alt=""
-                    className={`h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-gray-100 transition-transform ${
+                    className={`h-10 w-10 shrink-0 rounded-lg object-cover ring-1 ring-[var(--color-borde)] transition-transform ${
                       isActive ? "ring-[var(--color-primary)]/50" : ""
                     }`}
                     loading="lazy"
                   />
                 )}
                 <div className="min-w-0 flex-1 text-left">
-                  <p className={`font-medium truncate ${isActive ? "text-[var(--color-primary)]" : "text-gray-900"}`}>
+                  <p className={`font-medium truncate ${isActive ? "text-[var(--color-primary)]" : "text-[var(--color-texto)]"}`}>
                     {cat.nombre}
                   </p>
                   {cat.count != null && (
-                    <p className={`text-[11px] ${isActive ? "text-[var(--color-primary)]/70" : "text-gray-400"}`}>
+                    <p className={`text-[11px] ${isActive ? "text-[var(--color-primary)]/70" : "text-[var(--color-secondary)]"}`}>
                       {cat.count} {cat.count === 1 ? "producto" : "productos"}
                     </p>
                   )}

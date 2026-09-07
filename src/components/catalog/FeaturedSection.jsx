@@ -79,19 +79,25 @@ export default function FeaturedSection({ productos, onOpen, onSeeCategory, them
   };
 
   const arrowBtnClass =
-    "flex h-8 w-8 items-center justify-center rounded-full text-white shadow-md transition-all enabled:hover:scale-110 enabled:active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed";
+    "flex h-8 w-8 items-center justify-center rounded-full text-[var(--color-primary-texto)] shadow-md transition-all enabled:hover:scale-110 enabled:active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed";
+
+  const expandedCols = {
+    2: "lg:grid-cols-2",
+    3: "lg:grid-cols-3",
+    4: "lg:grid-cols-4",
+  }[theme?.["columnas-grid"]] || "lg:grid-cols-4";
 
   return (
     <section className="mb-5">
       <div className="mb-2.5 flex items-center justify-between">
-        <h2 className="flex items-center gap-1.5 font-display text-base sm:text-lg font-semibold tracking-tight text-gray-900">
-          <span className="text-sm text-amber-500" aria-hidden>
+        <h2 className="flex items-center gap-1.5 font-display text-base sm:text-lg font-semibold tracking-tight text-[var(--color-texto)]">
+          <span className="text-sm text-[var(--color-accent)]" aria-hidden>
             ★
           </span>
           Destacados
         </h2>
         <div className="flex items-center gap-2 sm:gap-3">
-          <span className="hidden text-xs text-gray-400 sm:inline">
+          <span className="hidden text-xs text-[var(--color-secondary)] sm:inline">
             {productos.length} productos
           </span>
           <div
@@ -152,7 +158,7 @@ export default function FeaturedSection({ productos, onOpen, onSeeCategory, them
 
       <div ref={contentRef} className={expandido ? "overflow-hidden" : ""}>
         {expandido ? (
-          <div className="animate-fade-in-up grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
+          <div className={`animate-fade-in-up grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 ${expandedCols}`}>
             {productos.map((p) => (
               <FeaturedCard
                 key={p.id}

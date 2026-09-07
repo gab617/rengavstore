@@ -32,8 +32,8 @@ export default function WhatsAppButton({ telefono }) {
             className="fixed inset-0 z-40"
             onClick={() => setOpen(false)}
           />
-          <div className="fixed bottom-24 left-5 z-50 w-64 origin-bottom-left animate-scale-in overflow-hidden rounded-2xl bg-white shadow-2xl ring-1 ring-gray-200">
-            <p className="px-4 pb-2 pt-3.5 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+          <div className="fixed bottom-24 left-5 z-50 w-64 origin-bottom-left animate-scale-in overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl ring-1 ring-[var(--color-borde)]">
+            <p className="px-4 pb-2 pt-3.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
               ¿En qué te ayudamos?
             </p>
             <ul className="pb-1.5">
@@ -44,14 +44,14 @@ export default function WhatsAppButton({ telefono }) {
                     target="_blank"
                     rel="noreferrer"
                     onClick={() => setOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-sm text-gray-700 transition-colors hover:bg-gray-50"
+                    className="flex items-center gap-3 px-4 py-3 text-sm text-[var(--color-texto)] transition-colors hover:surface-soft"
                   >
                     <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#25D366]/15 text-lg">
                       {o.icon}
                     </span>
                     <div className="min-w-0">
-                      <p className="font-semibold text-gray-900">{o.label}</p>
-                      <p className="truncate text-xs text-gray-400">{o.hint}</p>
+                      <p className="font-semibold">{o.label}</p>
+                      <p className="truncate text-xs text-[var(--color-secondary)]">{o.hint}</p>
                     </div>
                   </a>
                 </li>

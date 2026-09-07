@@ -8,8 +8,8 @@ export default function CategorySidebar({
     "text-[11px] font-semibold px-2 py-0.5 rounded-full shrink-0";
 
   const row = (active) =>
-    `w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-xl text-sm transition-all ${
-      active ? "text-white shadow-lg" : "text-gray-600 hover:bg-white hover:shadow-sm"
+    `w-full flex items-center justify-between gap-2 px-2.5 py-1.5 rounded-[var(--radio)] text-sm transition-all ${
+      active ? "text-[var(--color-primary-texto)] shadow-lg" : "text-[var(--color-secondary)] hover:surface-soft hover:shadow-sm"
     }`;
 
   const activeStyle = {
@@ -20,7 +20,7 @@ export default function CategorySidebar({
   return (
     <aside className="hidden md:block w-60 shrink-0">
       <div className="sticky top-4 space-y-0.5">
-        <h2 className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-gray-400">
+        <h2 className="px-3 pb-1.5 text-[11px] font-semibold uppercase tracking-[0.15em] text-[var(--color-secondary)]">
           Categorías
         </h2>
         <button
@@ -34,7 +34,7 @@ export default function CategorySidebar({
             style={
               categoria === null
                 ? { background: "rgba(255,255,255,0.22)" }
-                : { background: "var(--color-primary)" , color: "#fff" }
+                : { background: "var(--color-primary)", color: "var(--color-primary-texto)" }
             }
           >
             {total}
@@ -55,7 +55,7 @@ export default function CategorySidebar({
                 style={
                   active
                     ? { background: "rgba(255,255,255,0.22)" }
-                    : { background: "var(--color-primary)", color: "#fff" }
+                    : { background: "var(--color-primary)", color: "var(--color-primary-texto)" }
                 }
               >
                 {c.count}

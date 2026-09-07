@@ -96,26 +96,26 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
   };
 
   const inputCls = (field) =>
-    `w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-gray-900 placeholder:text-gray-400 transition-shadow focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent ${
-      errors[field] ? "border-red-300" : "border-gray-200"
+    `w-full rounded-[var(--radio)] border bg-[var(--color-tarjeta)] px-3.5 py-2.5 text-sm text-[var(--color-texto)] placeholder:text-[var(--color-secondary)] transition-shadow focus:outline-none focus:ring-2 focus:ring-[var(--color-primary)] focus:border-transparent ${
+      errors[field] ? "border-red-300" : "border-[var(--color-borde)]"
     }`;
 
   return (
     <form onSubmit={submit} className="flex flex-1 flex-col overflow-hidden">
-      <header className="flex shrink-0 items-center justify-between border-b border-gray-100 px-4 py-3.5">
+      <header className="flex shrink-0 items-center justify-between border-b border-[var(--color-borde)] px-4 py-3.5">
         <button
           onClick={onBack}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-secondary)] transition-colors hover:bg-gray-100 hover:text-[var(--color-texto)]"
           aria-label="Volver al carrito"
         >
           ←
         </button>
-        <h2 className="font-display text-lg font-semibold tracking-tight text-gray-900">
+        <h2 className="font-display text-lg font-semibold tracking-tight text-[var(--color-texto)]">
           Tus datos
         </h2>
         <button
           onClick={onClose}
-          className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900"
+          className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-secondary)] transition-colors hover:bg-gray-100 hover:text-[var(--color-texto)]"
           aria-label="Cerrar carrito"
         >
           ✕
@@ -133,22 +133,22 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
           className="absolute -left-[9999px] h-0 w-0 opacity-0"
         />
 
-        <div className="rounded-xl bg-gray-50 px-3.5 py-2.5 text-xs text-gray-500">
+        <div className="rounded-[var(--radio)] surface-soft px-3.5 py-2.5 text-xs text-[var(--color-secondary)]">
           Pedido para{" "}
-          <span className="font-semibold text-gray-700">{sucursalNombre}</span> ·
+          <span className="font-semibold text-[var(--color-texto)]">{sucursalNombre}</span> ·
           {items.length} {items.length === 1 ? "producto" : "productos"} ·{" "}
-          <span className="font-semibold tabular-nums text-gray-900">
+          <span className="font-semibold tabular-nums text-[var(--color-texto)]">
             {formatPrice(subtotal)}
           </span>
           {items.some((i) => i.talle) && (
-            <span className="ml-1 text-gray-400">
+            <span className="ml-1 text-[var(--color-secondary)]">
               (con talles)
             </span>
           )}
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             ¿Cómo vas a pagar?
           </label>
           <div className="grid grid-cols-2 gap-2">
@@ -157,10 +157,10 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
                 key={m.value}
                 type="button"
                 onClick={() => setMetodoPago(m.value)}
-                className={`rounded-xl px-3 py-2.5 text-sm font-semibold transition-all ${
+                className={`rounded-[var(--radio)] px-3 py-2.5 text-sm font-semibold transition-all ${
                   metodoPago === m.value
-                    ? "text-white"
-                    : "text-gray-600 ring-1 ring-inset ring-gray-200 hover:bg-gray-50"
+                    ? "text-[var(--color-primary-texto)]"
+                    : "text-[var(--color-secondary)] ring-1 ring-inset ring-[var(--color-borde)] hover:surface-soft"
                 }`}
                 style={
                   metodoPago === m.value
@@ -175,7 +175,7 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             Nombre *
           </label>
           <input
@@ -190,7 +190,7 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             Teléfono *
           </label>
           <input
@@ -206,7 +206,7 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             Email
           </label>
           <input
@@ -220,7 +220,7 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             Dirección
           </label>
           <input
@@ -232,7 +232,7 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         </div>
 
         <div>
-          <label className="mb-1 block text-xs font-semibold text-gray-700">
+          <label className="mb-1 block text-xs font-semibold text-[var(--color-texto)]">
             Notas
           </label>
           <textarea
@@ -251,18 +251,18 @@ export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, 
         )}
       </div>
 
-      <footer className="flex shrink-0 items-center gap-2 border-t border-gray-100 p-4">
+      <footer className="flex shrink-0 items-center gap-2 border-t border-[var(--color-borde)] p-4">
         <button
           type="button"
           onClick={onBack}
-          className="rounded-xl px-4 py-2.5 text-sm font-semibold text-gray-500 ring-1 ring-inset ring-gray-200 transition-colors hover:bg-gray-50"
+          className="rounded-[var(--radio)] px-4 py-2.5 text-sm font-semibold text-[var(--color-secondary)] ring-1 ring-inset ring-[var(--color-borde)] transition-colors hover:surface-soft"
         >
           Volver
         </button>
         <button
           type="submit"
           disabled={loading || items.length === 0}
-          className="flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
+          className="flex-1 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] transition-all hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40"
           style={{ background: "var(--color-primary)" }}
         >
           {loading ? "Registrando..." : "Registrar pedido"}

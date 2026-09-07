@@ -111,6 +111,7 @@ function StorefrontView({ slug }) {
           sucursal={sucursal.sucursal}
           tenant={sucursal.tenant}
           settings={set}
+          theme={theme}
           logo={logo}
           heroUrl={heroUrl}
           onOpenCategories={() => setCatSheetOpen(true)}
@@ -185,7 +186,7 @@ function StorefrontView({ slug }) {
       <CartDrawer
         open={cartOpen}
         onClose={() => setCartOpen(false)}
-        primary={theme.primary}
+        theme={theme}
         slug={slug}
         sucursalNombre={sucursal.sucursal.nombre}
         settings={set}
@@ -208,6 +209,7 @@ function StorefrontView({ slug }) {
           categorias={categorias}
           activeCategoryId={categoria}
           settings={set}
+          theme={theme}
         />
       </div>
   );

@@ -11,7 +11,7 @@ const TRANSITION_MS = 350;
 export default function CartDrawer({
   open,
   onClose,
-  primary = "#2563eb",
+  theme,
   slug,
   sucursalNombre,
   settings,
@@ -79,12 +79,12 @@ export default function CartDrawer({
       />
 
       <aside
-        className={`absolute inset-x-0 bottom-0 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-3xl bg-white shadow-2xl will-change-transform transition-transform duration-300 ease-out md:inset-y-0 md:right-0 md:max-h-none md:max-w-sm md:rounded-none ${
+        className={`absolute inset-x-0 bottom-0 flex max-h-[88dvh] w-full flex-col overflow-hidden rounded-t-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl will-change-transform transition-transform duration-300 ease-out md:inset-y-0 md:right-0 md:max-h-none md:max-w-sm md:rounded-none ${
           visible
             ? "translate-y-0 md:translate-x-0"
             : "translate-y-full md:translate-y-0 md:translate-x-full"
         }`}
-        style={{ "--color-primary": primary }}
+        style={theme?.vars}
       >
         {view === "checkout" ? (
           <CheckoutForm
@@ -106,13 +106,13 @@ export default function CartDrawer({
           />
         ) : (
           <>
-            <header className="shrink-0 border-b border-gray-100">
-              <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-gray-200 md:hidden" />
+            <header className="shrink-0 border-b border-[var(--color-borde)]">
+              <div className="mx-auto mt-3 h-1 w-10 rounded-full bg-[var(--color-borde)] md:hidden" />
               <div className="flex items-center justify-between gap-3 px-4 pb-3 pt-3 md:pt-4">
-                <h2 className="font-display text-base font-semibold tracking-tight text-gray-900">
+                <h2 className="font-display text-base font-semibold tracking-tight text-[var(--color-texto)]">
                   Tu carrito
                   {count > 0 && (
-                    <span className="ml-2 text-xs font-medium text-gray-400">
+                    <span className="ml-2 text-xs font-medium text-[var(--color-secondary)]">
                       ({count} {count === 1 ? "producto" : "productos"})
                     </span>
                   )}
@@ -121,7 +121,7 @@ export default function CartDrawer({
                   {items.length > 0 && (
                     <button
                       onClick={() => setConfirmingClear(true)}
-                      className="flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-gray-500 transition-colors hover:bg-red-50 hover:text-red-600"
+                      className="flex h-9 items-center gap-1.5 rounded-full px-3 text-xs font-semibold text-[var(--color-secondary)] transition-colors hover:bg-red-50 hover:text-red-600"
                     >
                       <svg
                         className="h-3.5 w-3.5"
@@ -141,7 +141,7 @@ export default function CartDrawer({
                   )}
                   <button
                     onClick={onClose}
-                    className="flex h-9 w-9 items-center justify-center rounded-full text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-900"
+                    className="flex h-9 w-9 items-center justify-center rounded-full text-[var(--color-secondary)] transition-colors hover:bg-gray-100 hover:text-[var(--color-texto)]"
                     aria-label="Cerrar carrito"
                   >
                     <svg
@@ -167,7 +167,7 @@ export default function CartDrawer({
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setConfirmingClear(false)}
-                    className="rounded-lg px-3 py-1.5 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-200/60"
+                    className="rounded-lg px-3 py-1.5 text-xs font-semibold text-[var(--color-secondary)] transition-colors hover:surface-soft"
                   >
                     Cancelar
                   </button>
@@ -186,20 +186,20 @@ export default function CartDrawer({
 
             {items.length === 0 ? (
               <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
-                <span className="flex h-20 w-20 items-center justify-center rounded-full bg-gradient-to-br from-gray-50 to-gray-100 text-4xl ring-1 ring-gray-900/5">
+                <span className="flex h-20 w-20 items-center justify-center rounded-full surface-soft text-4xl ring-1 ring-[var(--color-borde)]">
                   🛒
                 </span>
                 <div>
-                  <p className="text-sm font-semibold text-gray-900">
+                  <p className="text-sm font-semibold text-[var(--color-texto)]">
                     Tu carrito está vacío
                   </p>
-                  <p className="mt-1 text-xs text-gray-500">
+                  <p className="mt-1 text-xs text-[var(--color-secondary)]">
                     Explorá el catálogo y agregá productos.
                   </p>
                 </div>
                 <button
                   onClick={onClose}
-                  className="mt-1 rounded-xl px-5 py-2.5 text-xs font-semibold text-white shadow-md transition-all hover:opacity-90 active:scale-[0.98]"
+                  className="mt-1 rounded-[var(--radio)] px-5 py-2.5 text-xs font-semibold text-[var(--color-primary-texto)] shadow-md transition-all hover:opacity-90 active:scale-[0.98]"
                   style={{ background: "var(--color-primary)" }}
                 >
                   Seguir comprando
@@ -207,24 +207,24 @@ export default function CartDrawer({
               </div>
             ) : (
               <>
-                <ul className="flex-1 divide-y divide-gray-100 overflow-y-auto">
+                <ul className="flex-1 divide-y divide-[var(--color-borde)] overflow-y-auto">
                   {items.map((item) => (
                     <CartLineItem key={item.id} item={item} />
                   ))}
                 </ul>
 
-                <footer className="shrink-0 border-t border-gray-100 bg-gray-50/70 p-4 pb-6">
+                <footer className="shrink-0 border-t border-[var(--color-borde)] surface-soft p-4 pb-6">
                   <div className="flex items-end justify-between">
-                    <span className="pb-0.5 text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+                    <span className="pb-0.5 text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                       Subtotal
                     </span>
-                    <span className="text-xl font-bold tabular-nums text-gray-900">
+                    <span className="text-xl font-bold tabular-nums text-[var(--color-texto)]">
                       {formatPrice(subtotal)}
                     </span>
                   </div>
                   <button
                     onClick={() => setView("checkout")}
-                    className="mt-3 w-full rounded-xl py-3.5 text-sm font-bold text-white shadow-lg transition-all hover:opacity-95 hover:shadow-xl active:scale-[0.99]"
+                    className="mt-3 w-full rounded-[var(--radio)] py-3.5 text-sm font-bold text-[var(--color-primary-texto)] shadow-lg transition-all hover:opacity-95 hover:shadow-xl active:scale-[0.99]"
                     style={{
                       background: `linear-gradient(135deg, var(--color-primary) 0%, color-mix(in srgb, var(--color-primary) 72%, #0f172a) 100%)`,
                     }}

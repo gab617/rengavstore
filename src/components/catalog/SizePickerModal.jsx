@@ -4,7 +4,7 @@ import useCart from "../../hooks/useCart";
 import { publicUrl } from "../../lib/storefront";
 import { formatPrice } from "../../lib/tienda";
 
-export default function SizePickerModal({ p, onClose }) {
+export default function SizePickerModal({ p, onClose, theme }) {
   const [selected, setSelected] = useState(null);
   const [qty, setQty] = useState(1);
   const [error, setError] = useState(false);
@@ -78,15 +78,15 @@ export default function SizePickerModal({ p, onClose }) {
       }}
     >
       <div
-        style={modalStyle}
-        className="relative w-full max-w-sm overflow-hidden rounded-3xl bg-white shadow-2xl animate-scale-in"
+        style={{ ...theme?.vars, ...modalStyle }}
+        className="relative w-full max-w-sm overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl animate-scale-in"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Top accent bar */}
         <div
           className="h-1.5 w-full"
           style={{
-            background: `linear-gradient(90deg, ${primaryColor}15, ${primaryColor}40, ${primaryColor}15)`,
+            background: `linear-gradient(90deg, color-mix(in srgb, var(--color-accent) 15%, transparent), color-mix(in srgb, var(--color-accent) 40%, transparent), color-mix(in srgb, var(--color-accent) 15%, transparent))`,
           }}
         />
 
@@ -94,14 +94,14 @@ export default function SizePickerModal({ p, onClose }) {
           {/* Header */}
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
-              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400">
+              <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)]">
                 Seleccionar talle
               </p>
-              <p className="mt-1 text-base font-semibold text-gray-900 leading-snug">
+              <p className="mt-1 text-base font-semibold text-[var(--color-texto)] leading-snug">
                 {p.nombre}
               </p>
               {p.marca && (
-                <p className="mt-0.5 text-sm font-medium text-gray-500">
+                <p className="mt-0.5 text-sm font-medium text-[var(--color-secondary)]">
                   {p.marca}
                 </p>
               )}
@@ -109,7 +109,7 @@ export default function SizePickerModal({ p, onClose }) {
             <button
               onClick={() => !added && onClose()}
               disabled={added}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-900 active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[var(--color-secondary)] transition-all hover:bg-gray-100 hover:text-[var(--color-texto)] active:scale-95 disabled:opacity-40 disabled:hover:bg-transparent"
               aria-label="Cerrar"
             >
               <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -121,7 +121,7 @@ export default function SizePickerModal({ p, onClose }) {
 
           {/* Size selection - prominent */}
           <div className="mt-5">
-            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-gray-400 mb-2">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-[var(--color-secondary)] mb-2">
               Elegí tu talle
             </p>
             <div className="flex flex-wrap gap-2">
@@ -139,12 +139,12 @@ export default function SizePickerModal({ p, onClose }) {
                       setSelected(s.nombre);
                       setError(false);
                     }}
-                    className={`relative flex flex-col items-center justify-center rounded-xl px-4 py-3 text-sm font-semibold transition-all ${
+                    className={`group relative flex flex-col items-center justify-center rounded-[var(--radio)] px-4 py-3 text-sm font-semibold transition-all ${
                       outOfStock
-                        ? "cursor-not-allowed bg-gray-100 text-gray-500 ring-1 ring-gray-200"
+                        ? "cursor-not-allowed surface-soft text-[var(--color-secondary)] ring-1 ring-[var(--color-borde)]"
                         : isSelected
-                          ? "text-white shadow-lg ring-2 scale-105"
-                          : "bg-white text-gray-700 ring-1 ring-gray-200 hover:ring-gray-300 hover:bg-gray-50 active:scale-95"
+                          ? "text-[var(--color-primary-texto)] shadow-lg ring-2 scale-105"
+                          : "bg-[var(--color-tarjeta)] text-[var(--color-texto)] ring-1 ring-[var(--color-borde)] hover:ring-[var(--color-texto)]/40 hover:surface-soft active:scale-95"
                     }`}
                     style={
                       isSelected
@@ -158,21 +158,41 @@ export default function SizePickerModal({ p, onClose }) {
                   >
                     <span className="text-lg leading-none">{s.nombre}</span>
                     <span
-                      className={`mt-1.5 text-[10px] font-medium leading-none ${
+                      className={`relative mt-1.5 flex h-4 w-full items-center justify-center text-[10px] font-medium leading-none ${
                         outOfStock
                           ? "text-red-400"
                           : isSelected
-                            ? "text-white/80"
+                            ? "text-[var(--color-primary-texto)]/80"
                             : lowStock
                               ? "text-amber-500"
                               : "text-green-600"
                       }`}
                     >
-                      {outOfStock ? "Sin stock" : `${s.stock} disp.`}
+                      <span
+                        aria-hidden="true"
+                        className={`h-1.5 w-1.5 rounded-full transition-all duration-200 ${
+                          outOfStock
+                            ? "bg-red-400 opacity-60 hidden sm:block"
+                            : lowStock
+                              ? "bg-amber-400 hidden sm:block sm:group-hover:scale-0 sm:group-hover:opacity-0"
+                              : "bg-green-500 block sm:group-hover:scale-0 sm:group-hover:opacity-0"
+                        }`}
+                      />
+                      <span
+                        className={`absolute inset-0 flex items-center justify-center text-[10px] font-semibold transition-all duration-200 ${
+                          outOfStock
+                            ? "opacity-100"
+                            : lowStock
+                              ? `${isSelected ? "!text-[var(--color-primary-texto)]" : "text-amber-500"} opacity-100 scale-100 sm:opacity-0 sm:scale-75 sm:group-hover:scale-100 sm:group-hover:opacity-100`
+                              : `${isSelected ? "!text-[var(--color-primary-texto)]" : "text-green-600"} opacity-0 scale-75 group-hover:scale-100 group-hover:opacity-100`
+                        }`}
+                      >
+                        {outOfStock ? "Sin stock" : lowStock ? "¡Quedan pocas!" : "Disponible"}
+                      </span>
                     </span>
                     {isSelected && (
                       <div
-                        className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-white shadow-sm"
+                        className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[var(--color-tarjeta)] shadow-sm"
                         style={{ color: primaryColor }}
                       >
                         <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
@@ -197,13 +217,13 @@ export default function SizePickerModal({ p, onClose }) {
           </div>
 
           {/* Image + Quantity + Subtotal row */}
-          <div className="mt-5 rounded-2xl border border-gray-100 bg-gradient-to-r from-gray-50 to-white/50 p-4 shadow-sm ring-1 ring-inset ring-white">
+          <div className="mt-5 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4 shadow-sm">
             <div className="flex items-center flex-col w-full justify-between gap-3">
               {/* Left: image + quantity */}
               <div className="flex items-center gap-3">
                 {img && (
                   <div
-                    className="h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 ring-gray-100"
+                    className="h-12 w-12 shrink-0 overflow-hidden rounded-lg ring-1 ring-[var(--color-borde)]"
                     style={{ background: `${primaryColor}08` }}
                   >
                     <img
@@ -213,22 +233,22 @@ export default function SizePickerModal({ p, onClose }) {
                     />
                   </div>
                 )}
-                <div className="flex items-center gap-1 rounded-xl bg-white/80 px-1 py-1 ring-1 ring-inset ring-gray-200 shadow-sm">
+                <div className="flex items-center gap-1 rounded-[var(--radio)] bg-[var(--color-tarjeta)]/70 px-1 py-1 ring-1 ring-inset ring-[var(--color-borde)] shadow-sm">
                   <button
                     onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 active:scale-95"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-secondary)] transition-all hover:bg-gray-100 hover:text-[var(--color-texto)] active:scale-95"
                     aria-label="Disminuir cantidad"
                   >
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
                       <line x1="5" y1="12" x2="19" y2="12" />
                     </svg>
                   </button>
-                  <span className="w-8 text-center text-base font-bold tabular-nums text-gray-900 select-none">
+                  <span className="w-8 text-center text-base font-bold tabular-nums text-[var(--color-texto)] select-none">
                     {qty}
                   </span>
                   <button
                     onClick={() => setQty((q) => q + 1)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-gray-500 transition-all hover:bg-gray-100 hover:text-gray-900 active:scale-95"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-[var(--color-secondary)] transition-all hover:bg-gray-100 hover:text-[var(--color-texto)] active:scale-95"
                     aria-label="Aumentar cantidad"
                   >
                     <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
@@ -241,10 +261,10 @@ export default function SizePickerModal({ p, onClose }) {
 
               {/* Right: subtotal */}
               <div className="text-right">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">
                   Subtotal
                 </p>
-                <p className="text-xl font-bold tabular-nums" style={{ color: primaryColor }}>
+                <p className="text-xl font-bold tabular-nums" style={{ color: "var(--color-accent)" }}>
                   {formatPrice(subtotal)}
                 </p>
               </div>
@@ -253,38 +273,50 @@ export default function SizePickerModal({ p, onClose }) {
 
           {/* Selected size summary */}
           {selected && (
-            <div className="mt-4 flex items-center gap-3 rounded-xl bg-gradient-to-r from-blue-50 to-indigo-50 px-4 py-3 ring-1 ring-inset ring-blue-100 animate-slide-up">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white shadow-sm ring-1 ring-inset ring-blue-100">
-                <svg className="h-5 w-5 text-blue-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <div
+              className="mt-4 flex items-center gap-3 rounded-[var(--radio)] px-4 py-3 ring-1 ring-inset animate-slide-up"
+              style={{
+                background: "color-mix(in srgb, var(--color-primary) 10%, var(--color-tarjeta))",
+                boxShadow: `0 0 0 1px color-mix(in srgb, var(--color-primary) 25%, transparent)`,
+              }}
+            >
+              <div
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[var(--color-tarjeta)] shadow-sm"
+                style={{ boxShadow: `0 0 0 1px color-mix(in srgb, var(--color-primary) 30%, transparent)` }}
+              >
+                <svg className="h-5 w-5" style={{ color: "var(--color-primary)" }} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M20 6L9 17l-5-5" />
                 </svg>
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-blue-700">
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em]" style={{ color: "var(--color-primary)" }}>
                   Talle seleccionado
                 </p>
-                <p className="text-base font-semibold text-gray-900 truncate">
+                <p className="text-base font-semibold text-[var(--color-texto)] truncate">
                   {selected}
                 </p>
               </div>
               <div className="text-right">
-                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
-                  Disponible
+                <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-[var(--color-secondary)]">
+                  Stock
                 </p>
-                <p className="text-sm font-bold text-green-600">
-                  {sizes.find((s) => s.nombre === selected)?.stock ?? 0} u.
-                </p>
+                {(() => {
+                  const st = sizes.find((s) => s.nombre === selected)?.stock ?? 0;
+                  const cls = st === 0 ? "text-red-500" : st <= 5 ? "text-amber-500" : "text-green-600";
+                  const label = st === 0 ? "Sin stock" : st <= 5 ? "¡Quedan pocas!" : "En stock";
+                  return <p className={`text-sm font-bold ${cls}`}>{label}</p>;
+                })()}
               </div>
             </div>
           )}
         </div>
 
         {/* Footer actions */}
-        <div className="flex gap-3 border-t border-gray-100 px-5 py-4 bg-white/80 backdrop-blur-sm">
+        <div className="flex gap-3 border-t border-[var(--color-borde)] px-5 py-4 bg-[var(--color-tarjeta)]/80 backdrop-blur-sm">
           <button
             onClick={() => !added && onClose()}
             disabled={added}
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-gray-600 ring-1 ring-inset ring-gray-200 transition-all hover:bg-gray-50 hover:text-gray-900 active:scale-[0.98] disabled:opacity-40"
+            className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-secondary)] ring-1 ring-inset ring-[var(--color-borde)] transition-all hover:surface-soft hover:text-[var(--color-texto)] active:scale-[0.98] disabled:opacity-40"
           >
             <svg className="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -295,7 +327,7 @@ export default function SizePickerModal({ p, onClose }) {
           <button
             onClick={handleAdd}
             disabled={added || !selected}
-            className="flex-1 flex items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-lg transition-all hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:hover:shadow-lg disabled:active:scale-100"
+            className="flex-1 flex items-center justify-center gap-2 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] shadow-lg transition-all hover:shadow-xl active:scale-[0.98] disabled:opacity-50 disabled:hover:shadow-lg disabled:active:scale-100"
             style={{
               background: `linear-gradient(135deg, ${primaryColor} 0%, color-mix(in srgb, ${primaryColor} 70%, #0f172a) 100%)`,
               boxShadow: `0 4px 14px -4px ${primaryColor}80`,

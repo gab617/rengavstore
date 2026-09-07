@@ -35,3 +35,7 @@ body {
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
+
+@utility surface-soft {
+  background: color-mix(in srgb, var(--color-tarjeta) 92%, var(--color-texto) 8%);
+}

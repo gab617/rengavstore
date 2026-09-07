@@ -80,17 +80,19 @@ export default function ProductModal({ p, onClose, theme }) {
       }}
     >
       <div
-        className="relative flex max-h-[92vh] sm:max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-3xl bg-white shadow-2xl animate-scale-in"
+        className="relative flex max-h-[92vh] sm:max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl animate-scale-in"
+        style={theme?.vars}
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4 text-white"
+          className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4"
           style={{
             background: `linear-gradient(135deg, ${primary} 0%, color-mix(in srgb, ${primary} 70%, #0f172a) 100%)`,
+            color: "var(--color-primary-texto)",
           }}
         >
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/60">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.18em] opacity-60">
               {p.marca || "Producto"}
             </p>
             <h3 className="truncate font-display text-lg sm:text-xl font-semibold tracking-tight">
@@ -108,7 +110,7 @@ export default function ProductModal({ p, onClose, theme }) {
 
         <div className="overflow-y-auto">
           <div className="p-4 pb-2 sm:p-6 sm:pb-3">
-            <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-2xl border border-gray-100 bg-gradient-to-br from-gray-50 to-gray-100 sm:aspect-[4/3]">
+            <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft sm:aspect-[4/3]">
               {img && !imgError ? (
                 <img
                   src={img}
@@ -119,7 +121,7 @@ export default function ProductModal({ p, onClose, theme }) {
               ) : (
                 <span className="flex flex-col items-center gap-2">
                   <svg
-                    className="h-16 w-16 text-gray-300"
+                    className="h-16 w-16 text-[var(--color-borde)]"
                     viewBox="0 0 24 24"
                     fill="none"
                     stroke="currentColor"
@@ -131,7 +133,7 @@ export default function ProductModal({ p, onClose, theme }) {
                     <path d="M3 8l9 5 9-5" />
                     <path d="M12 13v9" />
                   </svg>
-                  <span className="text-sm font-medium text-gray-400">
+                  <span className="text-sm font-medium text-[var(--color-secondary)]">
                     Sin imagen
                   </span>
                 </span>
@@ -172,7 +174,7 @@ export default function ProductModal({ p, onClose, theme }) {
                     className={`h-16 w-16 shrink-0 overflow-hidden rounded-xl transition-all ${
                       idx === sel
                         ? "ring-2 ring-[var(--color-primary)] opacity-100"
-                        : "opacity-50 ring-1 ring-gray-200 hover:opacity-100"
+                        : "opacity-50 ring-1 ring-[var(--color-borde)] hover:opacity-100"
                     }`}
                   >
                     <img
@@ -190,27 +192,27 @@ export default function ProductModal({ p, onClose, theme }) {
             <div className="flex flex-wrap items-center gap-2">
               <AvailabilityBadge disponibilidad={p.disponibilidad} />
               {p.tipo_unit && (
-                <span className="inline-flex items-center rounded-full bg-white px-2.5 py-1 text-xs font-medium text-gray-500 ring-1 ring-inset ring-gray-200">
-                  {p.tipo_unit}
-                </span>
+<span className="inline-flex items-center rounded-full bg-[var(--color-tarjeta)] px-2.5 py-1 text-xs font-medium text-[var(--color-secondary)] ring-1 ring-inset ring-[var(--color-borde)]">
+                   {p.tipo_unit}
+                 </span>
               )}
             </div>
 
-            <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+            <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+              <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                 Precio
               </p>
               <p
                 className="mt-1 text-2xl font-bold tabular-nums"
-                style={{ color: primary }}
+                style={{ color: "var(--color-accent)" }}
               >
                 {formatPrice(p.precio_venta)}
               </p>
             </div>
 
             {hasSizes && (
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                   Elegí tu talle
                 </p>
                 <div className="mt-2">
@@ -232,8 +234,8 @@ export default function ProductModal({ p, onClose, theme }) {
             )}
 
             {!canAdd(p) ? (
-              <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50/60 px-4 py-3 text-center">
-                <p className="text-sm font-semibold text-gray-500">
+              <div className="rounded-[var(--radio)] border border-dashed border-[var(--color-borde)] surface-soft px-4 py-3 text-center">
+                <p className="text-sm font-semibold text-[var(--color-secondary)]">
                   {p.precio_venta == null
                     ? "Consultá por este producto"
                     : "Producto agotado"}
@@ -241,21 +243,21 @@ export default function ProductModal({ p, onClose, theme }) {
               </div>
             ) : inCart ? (
               <div className="space-y-2.5">
-                <div className="flex items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-gray-50/60 p-3.5">
+                <div className="flex items-center justify-between gap-3 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3.5">
                   <div>
-                    <p className="text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+                    <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                       Ya está en tu carrito
                     </p>
-                    <p className="mt-0.5 text-sm font-medium text-gray-900">
+                    <p className="mt-0.5 text-sm font-medium text-[var(--color-texto)]">
                       {enCarrito} × {formatPrice(p.precio_venta)}
                       {selectedTalle && (
-                        <span className="ml-1 text-gray-400">
+                        <span className="ml-1 text-[var(--color-secondary)]">
                           · Talle {selectedTalle}
                         </span>
                       )}
                     </p>
                   </div>
-                  <p className="text-base font-bold tabular-nums text-gray-900">
+                  <p className="text-base font-bold tabular-nums text-[var(--color-texto)]">
                     {formatPrice(enCarrito * p.precio_venta)}
                   </p>
                 </div>
@@ -264,7 +266,7 @@ export default function ProductModal({ p, onClose, theme }) {
                   <QtyStepper value={qty} onChange={setQty} />
                   <button
                     onClick={handleAdd}
-                    className="flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.99]"
+                    className="flex-1 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] transition-all hover:opacity-90 active:scale-[0.99]"
                     style={{ background: primary }}
                   >
                     {added ? "Agregado ✓" : "Agregar más"}
@@ -283,7 +285,7 @@ export default function ProductModal({ p, onClose, theme }) {
                 <QtyStepper value={qty} onChange={setQty} />
                 <button
                   onClick={handleAdd}
-                  className="flex-1 rounded-xl py-2.5 text-sm font-semibold text-white transition-all hover:opacity-90 active:scale-[0.99]"
+                  className="flex-1 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] transition-all hover:opacity-90 active:scale-[0.99]"
                   style={{ background: primary }}
                 >
                   {added ? "Agregado ✓" : "Agregar al carrito"}
@@ -295,17 +297,17 @@ export default function ProductModal({ p, onClose, theme }) {
               <div className="flex flex-wrap gap-2">
                 {categoria && (
                   <span
-                    className="rounded-full px-3 py-1 text-xs font-semibold text-white"
+                    className="rounded-full px-3 py-1 text-xs font-semibold"
                     style={{
-                      background: `color-mix(in srgb, ${primary} 15%, white)`,
-                      color: primary,
+                      background: `color-mix(in srgb, var(--color-primary) 15%, var(--color-tarjeta))`,
+                      color: "var(--color-primary)",
                     }}
                   >
                     {categoria}
                   </span>
                 )}
                 {sub && (
-                  <span className="rounded-full bg-white px-3 py-1 text-xs font-medium text-gray-600 ring-1 ring-inset ring-gray-200">
+                  <span className="rounded-full bg-[var(--color-tarjeta)] px-3 py-1 text-xs font-medium text-[var(--color-secondary)] ring-1 ring-inset ring-[var(--color-borde)]">
                     {sub}
                   </span>
                 )}
@@ -313,11 +315,11 @@ export default function ProductModal({ p, onClose, theme }) {
             )}
 
             {p.descripcion && (
-              <div className="rounded-2xl border border-gray-100 bg-gray-50/60 p-4">
-                <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-400">
+              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+                <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                   Descripción
                 </p>
-                <p className="mt-1 text-sm leading-relaxed text-gray-700">
+                <p className="mt-1 text-sm leading-relaxed text-[var(--color-texto)]">
                   {p.descripcion}
                 </p>
               </div>
@@ -332,20 +334,20 @@ export default function ProductModal({ p, onClose, theme }) {
 
 function QtyStepper({ value, onChange }) {
   return (
-    <div className="flex items-center rounded-xl ring-1 ring-inset ring-gray-200">
+    <div className="flex items-center rounded-[var(--radio)] ring-1 ring-inset ring-[var(--color-borde)]">
       <button
         onClick={() => onChange(Math.max(1, value - 1))}
-        className="px-3 py-2 text-base text-gray-500 transition-colors hover:text-gray-900"
+        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-colors hover:text-[var(--color-texto)]"
         aria-label="Disminuir cantidad"
       >
         −
       </button>
-      <span className="w-8 text-center text-sm font-bold tabular-nums text-gray-900">
+      <span className="w-8 text-center text-sm font-bold tabular-nums text-[var(--color-texto)]">
         {value}
       </span>
       <button
         onClick={() => onChange(value + 1)}
-        className="px-3 py-2 text-base text-gray-500 transition-colors hover:text-gray-900"
+        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-colors hover:text-[var(--color-texto)]"
         aria-label="Aumentar cantidad"
       >
         +

@@ -4,8 +4,8 @@ export default function Chip({ active, onClick, className = "", children }) {
       onClick={onClick}
       className={`px-3 py-1.5 rounded-full whitespace-nowrap font-medium text-[13px] transition-all ${
         active
-          ? "text-white shadow-md"
-          : "bg-white text-gray-600 ring-1 ring-gray-200 hover:text-gray-900 hover:ring-gray-300"
+          ? "text-[var(--color-primary-texto)] shadow-md"
+          : "bg-[var(--color-tarjeta)] text-[var(--color-secondary)] ring-1 ring-[var(--color-borde)] hover:text-[var(--color-texto)] hover:ring-[var(--color-texto)]/50"
       } ${className}`}
       style={
         active
