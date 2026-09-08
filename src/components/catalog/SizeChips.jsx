@@ -34,9 +34,9 @@ export default function SizeChips({ sizes = [], selected, onSelect }) {
                 ? "border-[var(--color-primary)] bg-[var(--color-primary)]/10 ring-1 ring-[var(--color-primary)]"
                 : outOfStock
                   ? "border-[var(--color-borde)] surface-soft opacity-40 cursor-not-allowed"
-                  : "border-[var(--color-borde)] surface-soft cursor-pointer hover:border-[var(--color-texto)]/40"
+                  : "border-[color-mix(in_srgb,var(--color-texto)_35%,transparent)] surface-soft cursor-pointer hover:border-[color-mix(in_srgb,var(--color-texto)_65%,transparent)] hover:shadow-sm"
             }`
-          : "group relative rounded border border-[var(--color-borde)] surface-soft px-1 py-1.5 text-center text-[10px] sm:text-xs";
+          : "group relative rounded border border-[color-mix(in_srgb,var(--color-texto)_28%,transparent)] surface-soft px-1 py-1.5 text-center text-[10px] sm:text-xs";
 
         const Tag = selectable && !outOfStock ? "button" : "span";
 

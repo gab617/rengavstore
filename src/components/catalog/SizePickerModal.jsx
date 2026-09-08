@@ -144,7 +144,7 @@ export default function SizePickerModal({ p, onClose, theme }) {
                         ? "cursor-not-allowed surface-soft text-[var(--color-secondary)] ring-1 ring-[var(--color-borde)]"
                         : isSelected
                           ? "text-[var(--color-primary-texto)] shadow-lg ring-2 scale-105"
-                          : "bg-[var(--color-tarjeta)] text-[var(--color-texto)] ring-1 ring-[var(--color-borde)] hover:ring-[var(--color-texto)]/40 hover:surface-soft active:scale-95"
+                          : "bg-[var(--color-tarjeta)] text-[var(--color-texto)] ring-1 ring-[color-mix(in_srgb,var(--color-texto)_35%,transparent)] hover:ring-[color-mix(in_srgb,var(--color-texto)_65%,transparent)] hover:surface-soft active:scale-95"
                     }`}
                     style={
                       isSelected

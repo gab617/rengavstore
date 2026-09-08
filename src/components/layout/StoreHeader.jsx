@@ -18,7 +18,7 @@ export default function StoreHeader({ sucursal, tenant, settings, theme, logo, h
             alt=""
             className="h-full w-full"
             style={{
-              objectFit: theme?.["hero-fit"] || "contain",
+              objectFit: theme?.["hero-fit"] || "cover",
               objectPosition: theme?.["hero-position"] || "center",
               transform: `scale(${theme?.["hero-zoom"] || 1})`,
             }}
@@ -36,7 +36,13 @@ export default function StoreHeader({ sucursal, tenant, settings, theme, logo, h
 
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_15%_-20%,rgba(255,255,255,0.14),transparent_45%)] pointer-events-none" />
 
-      <div className="relative max-w-6xl mx-auto px-4 py-4 sm:py-12" style={{ color: "var(--color-primary-texto)" }}>
+      <div
+        className="relative z-10 max-w-[1440px] mx-auto px-4 pt-8 pb-12 sm:pt-14 sm:pb-16"
+        style={{
+          color: "var(--color-primary-texto)",
+          textShadow: heroUrl ? "0 1px 3px rgba(0,0,0,0.4)" : undefined,
+        }}
+      >
         <div className="flex items-center justify-between gap-3 sm:gap-5 mt-2 sm:mt-5">
           <div className="min-w-0">
             {logo && (

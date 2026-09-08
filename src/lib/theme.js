@@ -12,7 +12,7 @@ const THEME_DEFAULTS = {
   "logo-fit": "cover",
   "logo-zoom": "1",
   "logo-position": "center",
-  "hero-fit": "contain",
+  "hero-fit": "cover",
   "hero-zoom": "1",
   "hero-position": "center",
 };

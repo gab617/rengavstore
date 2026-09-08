@@ -56,7 +56,7 @@ export default function ProductCard({ p, onOpen, theme }) {
       >
         <button
           onClick={onOpen}
-          className="relative w-40 shrink-0 self-stretch overflow-hidden sm:w-full sm:aspect-[3/4] sm:self-auto"
+          className="relative w-40 shrink-0 self-stretch overflow-hidden sm:w-full sm:aspect-square sm:self-auto"
           aria-label={`Ver ${p.nombre}`}
           style={{
             background: `linear-gradient(135deg, ${tarjeta} 0%, color-mix(in srgb, ${tarjeta} 85%, transparent) 100%)`,
@@ -67,7 +67,7 @@ export default function ProductCard({ p, onOpen, theme }) {
               src={img}
               alt={p.nombre}
               loading="lazy"
-              className="h-full w-full object-contain object-center sm:object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+              className="h-full w-full object-contain object-center transition-transform duration-500 group-hover:scale-[1.04]"
             />
           ) : (
             <span

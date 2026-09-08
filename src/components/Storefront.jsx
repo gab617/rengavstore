@@ -25,11 +25,15 @@ import CategoryBottomSheet from "./catalog/CategoryBottomSheet";
 
 function LoadingScreen() {
   return (
-    <div className="min-h-screen">
-      <div className="h-40 animate-pulse bg-gray-200/70 sm:h-52" />
-      <div className="mx-auto max-w-6xl px-4 py-4">
-        <div className="mb-5 h-10 w-2/3 max-w-xs animate-pulse rounded-xl bg-gray-200/70" />
-        <CatalogSkeleton />
+    <div className="flex min-h-[100dvh] flex-col">
+      <div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col sm:px-4 sm:pt-0 sm:pb-8">
+        <div className="flex flex-1 flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm sm:rounded-2xl">
+          <div className="h-40 animate-pulse bg-gray-200/70 sm:h-56" />
+          <div className="px-4 py-5">
+            <div className="mb-5 h-10 w-2/3 max-w-xs animate-pulse rounded-xl bg-gray-200/70" />
+            <CatalogSkeleton />
+          </div>
+        </div>
       </div>
     </div>
   );
@@ -106,101 +110,123 @@ function StorefrontView({ slug }) {
   const categoriaSel = categorias.find((c) => c.id === categoria);
 
   return (
-      <div style={theme.style} className="min-h-screen">
-        <StoreHeader
-          sucursal={sucursal.sucursal}
-          tenant={sucursal.tenant}
-          settings={set}
-          theme={theme}
-          logo={logo}
-          heroUrl={heroUrl}
-          onOpenCategories={() => setCatSheetOpen(true)}
-        />
-
-      <div className="mx-auto flex max-w-6xl items-start gap-8 px-4 py-4 sm:py-8">
-        <CategorySidebar
-          categorias={categorias}
-          categoria={categoria}
-          setCategoria={selectCategoria}
-          total={visibles.length}
-        />
-
-        <main className="min-w-0 flex-1 pb-24">
-          {!categoria && !q && destacados.length > 0 && (
-            <FeaturedSection
-              productos={destacados}
-              onOpen={setProductoActivo}
-              onSeeCategory={verCategoriaDe}
+      <div style={theme.style} className="flex min-h-[100dvh] flex-col">
+<div className="mx-auto flex w-full max-w-[1440px] flex-1 flex-col sm:px-4 sm:pt-0 sm:pb-8">
+          <div
+            className="flex h-full flex-col overflow-hidden border shadow-sm sm:rounded-[var(--radio)]"
+            style={{
+              backgroundColor: theme.tarjeta,
+              borderColor: theme.borde,
+            }}
+          >
+            <StoreHeader
+              sucursal={sucursal.sucursal}
+              tenant={sucursal.tenant}
+              settings={set}
               theme={theme}
+              logo={logo}
+              heroUrl={heroUrl}
+              onOpenCategories={() => setCatSheetOpen(true)}
             />
-          )}
 
-          <div className="mb-3 sm:mb-6">
-            <MobileCategoryChips
-              categorias={categorias}
-              categoria={categoria}
-              setCategoria={selectCategoria}
-              total={visibles.length}
-            />
-            <CatalogToolbar
-              q={q}
-              setQ={setQ}
-              filtrados={filtrados.length}
-              total={visibles.length}
-            />
-          </div>
+            <div className="relative z-10 mt-1 flex items-start gap-8 px-4 pb-8 pt-3 sm:mt-4 sm:px-6 sm:pb-12 sm:pt-4">
+              <CategorySidebar
+                categorias={categorias}
+                categoria={categoria}
+                setCategoria={selectCategoria}
+                total={visibles.length}
+              />
 
-          {categoriaSel && (
-            <div className="mb-2">
-              <Breadcrumb
-                nombre={categoriaSel.nombre}
-                onHome={() => selectCategoria(null)}
+              <main className="min-w-0 flex-1 pb-24">
+                {!categoria && !q && destacados.length > 0 && (
+                  <FeaturedSection
+                    productos={destacados}
+                    onOpen={setProductoActivo}
+                    onSeeCategory={verCategoriaDe}
+                    theme={theme}
+                  />
+                )}
+
+                <div className="mb-3 sm:mb-6">
+                  <MobileCategoryChips
+                    categorias={categorias}
+                    categoria={categoria}
+                    setCategoria={selectCategoria}
+                    total={visibles.length}
+                  />
+                  <CatalogToolbar
+                    q={q}
+                    setQ={setQ}
+                    filtrados={filtrados.length}
+                    total={visibles.length}
+                  />
+                </div>
+
+                {categoriaSel && (
+                  <div className="mb-2">
+                    <Breadcrumb
+                      nombre={categoriaSel.nombre}
+                      onHome={() => selectCategoria(null)}
+                    />
+                  </div>
+                )}
+
+                <SubcategoryChips
+                  subcategorias={subcategorias}
+                  subcategoria={subcategoria}
+                  setSubcategoria={setSubcategoria}
+                />
+
+                {filtrados.length === 0 ? (
+                  <CatalogEmpty q={q} onClear={q ? () => setQ("") : undefined} />
+                ) : (
+                  <ProductGrid productos={filtrados} onOpen={setProductoActivo} theme={theme} />
+                )}
+              </main>
+
+              <div
+                aria-hidden
+                className="pointer-events-none absolute inset-x-0 -top-6 -z-10 h-20 sm:-top-16 sm:h-40"
+                style={{
+                  background: `linear-gradient(to bottom,
+                    transparent 0%,
+                    color-mix(in srgb, ${theme.tarjeta} 55%, transparent) 30%,
+                    ${theme.tarjeta} 55%,
+                    ${theme.tarjeta} 100%)`,
+                }}
               />
             </div>
-          )}
 
-          <SubcategoryChips
-            subcategorias={subcategorias}
-            subcategoria={subcategoria}
-            setSubcategoria={setSubcategoria}
+            <StoreFooter tenant={sucursal.tenant} />
+          </div>
+        </div>
+
+        {productoActivo && (
+          <ProductModal
+            p={productoActivo}
+            onClose={() => setProductoActivo(null)}
+            theme={theme}
           />
+        )}
 
-          {filtrados.length === 0 ? (
-            <CatalogEmpty q={q} onClear={q ? () => setQ("") : undefined} />
-          ) : (
-            <ProductGrid productos={filtrados} onOpen={setProductoActivo} theme={theme} />
-          )}
-        </main>
-      </div>
-
-      <StoreFooter tenant={sucursal.tenant} />
-
-      {productoActivo && (
-        <ProductModal
-          p={productoActivo}
-          onClose={() => setProductoActivo(null)}
+        <CartDrawer
+          open={cartOpen}
+          onClose={() => setCartOpen(false)}
           theme={theme}
+          slug={slug}
+          sucursalNombre={sucursal.sucursal.nombre}
+          settings={set}
         />
-      )}
 
-      <CartDrawer
-        open={cartOpen}
-        onClose={() => setCartOpen(false)}
-        theme={theme}
-        slug={slug}
-        sucursalNombre={sucursal.sucursal.nombre}
-        settings={set}
-      />
+        {!cartOpen && (
+          <CartBadge
+            count={count}
+            primary={theme.primary}
+            onClick={() => setCartOpen(true)}
+          />
+        )}
 
-      {!cartOpen && (
-        <CartBadge
-          count={count}
-          primary={theme.primary}
-          onClick={() => setCartOpen(true)}
-        />
-      )}
-
-      <WhatsAppButton telefono={set?.telefono_whatsapp} />
+        <WhatsAppButton telefono={set?.telefono_whatsapp} />
 
         <CategoryBottomSheet
           isOpen={catSheetOpen}

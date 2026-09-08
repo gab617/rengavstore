@@ -80,12 +80,12 @@ export default function ProductModal({ p, onClose, theme }) {
       }}
     >
       <div
-        className="relative flex max-h-[92vh] sm:max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl animate-scale-in"
+        className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl animate-scale-in"
         style={theme?.vars}
         onClick={(e) => e.stopPropagation()}
       >
         <div
-          className="flex shrink-0 items-center justify-between px-4 py-3 sm:px-6 sm:py-4"
+          className="flex shrink-0 items-center justify-between px-4 py-2.5 sm:px-6 sm:py-3"
           style={{
             background: `linear-gradient(135deg, ${primary} 0%, color-mix(in srgb, ${primary} 70%, #0f172a) 100%)`,
             color: "var(--color-primary-texto)",
@@ -188,7 +188,7 @@ export default function ProductModal({ p, onClose, theme }) {
             )}
           </div>
 
-          <div className="space-y-3 px-4 pb-5 sm:px-6 sm:pb-6">
+          <div className="space-y-2 px-4 pb-4 sm:space-y-2.5 sm:px-6 sm:pb-5">
             <div className="flex flex-wrap items-center gap-2">
               <AvailabilityBadge disponibilidad={p.disponibilidad} />
               {p.tipo_unit && (
@@ -198,12 +198,11 @@ export default function ProductModal({ p, onClose, theme }) {
               )}
             </div>
 
-            <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+            <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 sm:p-3.5">
               <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                 Precio
               </p>
-              <p
-                className="mt-1 text-2xl font-bold tabular-nums"
+              <p className="mt-0.5 text-xl font-bold tabular-nums sm:mt-1 sm:text-2xl"
                 style={{ color: "var(--color-accent)" }}
               >
                 {formatPrice(p.precio_venta)}
@@ -211,7 +210,7 @@ export default function ProductModal({ p, onClose, theme }) {
             </div>
 
             {hasSizes && (
-              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 sm:p-3.5">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                   Elegí tu talle
                 </p>
@@ -234,7 +233,7 @@ export default function ProductModal({ p, onClose, theme }) {
             )}
 
             {!canAdd(p) ? (
-              <div className="rounded-[var(--radio)] border border-dashed border-[var(--color-borde)] surface-soft px-4 py-3 text-center">
+              <div className="rounded-[var(--radio)] border border-dashed border-[var(--color-borde)] surface-soft px-3 py-2.5 text-center sm:px-4 sm:py-3">
                 <p className="text-sm font-semibold text-[var(--color-secondary)]">
                   {p.precio_venta == null
                     ? "Consultá por este producto"
@@ -242,8 +241,8 @@ export default function ProductModal({ p, onClose, theme }) {
                 </p>
               </div>
             ) : inCart ? (
-              <div className="space-y-2.5">
-                <div className="flex items-center justify-between gap-3 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3.5">
+              <div className="space-y-2 sm:space-y-2.5">
+                <div className="flex items-center justify-between gap-3 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 sm:p-3.5">
                   <div>
                     <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                       Ya está en tu carrito
@@ -266,8 +265,11 @@ export default function ProductModal({ p, onClose, theme }) {
                   <QtyStepper value={qty} onChange={setQty} />
                   <button
                     onClick={handleAdd}
-                    className="flex-1 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] transition-all hover:opacity-90 active:scale-[0.99]"
-                    style={{ background: primary }}
+                    className="flex-1 rounded-[var(--radio)] py-2.5 text-sm font-semibold text-[var(--color-primary-texto)] transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--color-primary)] active:translate-y-0 active:scale-[0.98]"
+                    style={{
+                      background: `linear-gradient(135deg, ${primary} 0%, color-mix(in srgb, ${primary} 72%, #0f172a) 100%)`,
+                      boxShadow: `0 4px 14px -4px ${primary}80`,
+                    }}
                   >
                     {added ? "Agregado ✓" : "Agregar más"}
                   </button>
@@ -275,7 +277,7 @@ export default function ProductModal({ p, onClose, theme }) {
 
                 <button
                   onClick={() => removeItem(p.id, selectedTalle)}
-                  className="w-full rounded-xl py-2.5 text-sm font-semibold text-red-600 ring-1 ring-inset ring-red-200 transition-colors hover:bg-red-50"
+                  className="w-full rounded-xl py-2 sm:py-2.5 text-sm font-semibold text-red-600 ring-1 ring-inset ring-red-200 transition-all duration-200 hover:bg-red-50 hover:ring-red-300 active:scale-[0.98]"
                 >
                   Quitar del carrito
                 </button>
@@ -315,7 +317,7 @@ export default function ProductModal({ p, onClose, theme }) {
             )}
 
             {p.descripcion && (
-              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-4">
+              <div className="rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 sm:p-3.5">
                 <p className="text-[11px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
                   Descripción
                 </p>
@@ -334,10 +336,10 @@ export default function ProductModal({ p, onClose, theme }) {
 
 function QtyStepper({ value, onChange }) {
   return (
-    <div className="flex items-center rounded-[var(--radio)] ring-1 ring-inset ring-[var(--color-borde)]">
+    <div className="flex items-center rounded-[var(--radio)] ring-1 ring-inset ring-[var(--color-borde)] transition-shadow hover:shadow-sm">
       <button
         onClick={() => onChange(Math.max(1, value - 1))}
-        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-colors hover:text-[var(--color-texto)]"
+        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-all hover:bg-[var(--color-borde)]/60 hover:text-[var(--color-texto)] active:scale-95"
         aria-label="Disminuir cantidad"
       >
         −
@@ -347,7 +349,7 @@ function QtyStepper({ value, onChange }) {
       </span>
       <button
         onClick={() => onChange(value + 1)}
-        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-colors hover:text-[var(--color-texto)]"
+        className="px-3 py-2 text-base text-[var(--color-secondary)] transition-all hover:bg-[var(--color-borde)]/60 hover:text-[var(--color-texto)] active:scale-95"
         aria-label="Aumentar cantidad"
       >
         +
