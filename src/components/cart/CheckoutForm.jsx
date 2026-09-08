@@ -32,7 +32,7 @@ const ERROR_MSGS = {
 export default function CheckoutForm({ slug, sucursalNombre, onSuccess, onBack, onClose }) {
   const { items, subtotal } = useCart();
   const [form, setForm] = useState(INITIAL);
-  const [metodoPago, setMetodoPago] = useState("tienda");
+  const [metodoPago, setMetodoPago] = useState("transferencia");
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);

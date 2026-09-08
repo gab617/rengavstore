@@ -1,6 +1,6 @@
 import useCart from "../../hooks/useCart";
 import { publicUrl } from "../../lib/storefront";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 
 export default function CartLineItem({ item }) {
   const { setQuantity, removeItem } = useCart();
@@ -27,7 +27,7 @@ export default function CartLineItem({ item }) {
               </p>
             )}
             <p className="truncate text-sm font-medium leading-snug text-[var(--color-texto)]">
-              {item.nombre}
+              {normalizeProductName(item.nombre)}
               {item.talle && (
                 <span className="ml-1 text-xs font-normal text-[var(--color-secondary)]">
                   · Talle {item.talle}

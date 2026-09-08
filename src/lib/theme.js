@@ -9,6 +9,12 @@ const THEME_DEFAULTS = {
   borde: "#e5e7eb",
   radio: "1rem",
   "columnas-grid": "3",
+  "logo-fit": "cover",
+  "logo-zoom": "1",
+  "logo-position": "center",
+  "hero-fit": "contain",
+  "hero-zoom": "1",
+  "hero-position": "center",
 };
 
 export function themeVars(t) {

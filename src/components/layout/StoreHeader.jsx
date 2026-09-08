@@ -2,6 +2,7 @@ import { SocialLinks } from "./SocialLinks";
 
 export default function StoreHeader({ sucursal, tenant, settings, theme, logo, heroUrl, onOpenCategories }) {
   const primary = theme?.primary || "#2563eb";
+  const heroContain = theme?.["hero-fit"] !== "cover";
 
   return (
     <header
@@ -15,12 +16,19 @@ export default function StoreHeader({ sucursal, tenant, settings, theme, logo, h
           <img
             src={heroUrl}
             alt=""
-            className="h-full w-full object-cover"
+            className="h-full w-full"
+            style={{
+              objectFit: theme?.["hero-fit"] || "contain",
+              objectPosition: theme?.["hero-position"] || "center",
+              transform: `scale(${theme?.["hero-zoom"] || 1})`,
+            }}
           />
           <div
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(135deg, color-mix(in srgb, ${primary} 72%, transparent) 0%, color-mix(in srgb, #0f172a 62%, transparent) 100%)`,
+              background: heroContain
+                ? `linear-gradient(135deg, color-mix(in srgb, ${primary} 52%, transparent) 0%, color-mix(in srgb, #0f172a 46%, transparent) 100%)`
+                : `linear-gradient(135deg, color-mix(in srgb, ${primary} 72%, transparent) 0%, color-mix(in srgb, #0f172a 62%, transparent) 100%)`,
             }}
           />
         </div>
@@ -32,16 +40,26 @@ export default function StoreHeader({ sucursal, tenant, settings, theme, logo, h
         <div className="flex items-center justify-between gap-3 sm:gap-5 mt-2 sm:mt-5">
           <div className="min-w-0">
             {logo && (
-              <img
-                src={logo}
-                alt={sucursal.nombre}
-                className="h-12 w-12 sm:h-20 sm:w-20 rounded-2xl object-cover ring-2 ring-white/30 bg-white/10 shadow-lg shrink-0"
-              />
+              <div className="mb-2 h-16 w-16 sm:h-24 sm:w-24 shrink-0 overflow-hidden rounded-2xl ring-2 ring-white/30 bg-white/10 shadow-lg">
+                <img
+                  src={logo}
+                  alt={sucursal.nombre}
+                  loading="lazy"
+                  className="h-full w-full"
+                  style={{
+                    objectFit: theme?.["logo-fit"] || "cover",
+                    objectPosition: theme?.["logo-position"] || "center",
+                    transform: `scale(${theme?.["logo-zoom"] || 1})`,
+                  }}
+                />
+              </div>
             )}
             <div className="min-w-0">
-              <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] opacity-60">
-                {tenant.nombre}
-              </p>
+              {!logo && (
+                <p className="text-[11px] sm:text-xs font-semibold uppercase tracking-[0.2em] opacity-60">
+                  {tenant.nombre}
+                </p>
+              )}
               <h1 className="font-display text-xl sm:text-4xl font-semibold tracking-tight leading-tight truncate">
                 {sucursal.nombre}
               </h1>

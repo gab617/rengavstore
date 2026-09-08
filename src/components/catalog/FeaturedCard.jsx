@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { publicUrl } from "../../lib/storefront";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 import useCart from "../../hooks/useCart";
 import SizePickerModal from "./SizePickerModal";
 
@@ -96,7 +96,7 @@ export default function FeaturedCard({ p, onOpen, onSeeCategory, theme }) {
               {p.marca || categoria || "Producto"}
             </p>
             <p className="mt-0.5 line-clamp-2 text-sm font-semibold leading-snug text-white">
-              {p.nombre}
+              {normalizeProductName(p.nombre)}
             </p>
             <p className="mt-1 text-sm font-bold tabular-nums text-white">
               {formatPrice(p.precio_venta)}

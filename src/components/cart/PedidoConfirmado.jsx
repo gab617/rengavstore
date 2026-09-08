@@ -6,7 +6,7 @@ import {
   shortOrderId,
   whatsAppLink,
 } from "../../lib/pedidos";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 
 function CopyField({ label, value, copyText = "Copiar", mono = false }) {
   const [copied, setCopied] = useState(false);
@@ -113,7 +113,7 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
             {items.map((i) => (
               <li key={`${i.producto_id}${i.talle || ""}`} className="flex justify-between gap-3 text-sm">
                 <span className="truncate text-[var(--color-texto)]">
-                  {i.nombre}
+                  {normalizeProductName(i.nombre)}
                   {i.talle && (
                     <span className="text-[var(--color-secondary)]"> · Talle {i.talle}</span>
                   )}{" "}

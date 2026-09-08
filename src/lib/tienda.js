@@ -9,6 +9,23 @@ export function formatPrice(n) {
   return ARS.format(n);
 }
 
+const MINOR_WORDS = new Set([
+  "a", "al", "con", "de", "del", "desde", "e", "el", "en", "entre",
+  "hasta", "la", "las", "los", "o", "para", "por", "sin", "sobre",
+  "u", "un", "una", "unos", "unas", "y",
+]);
+
+export function normalizeProductName(s) {
+  if (!s) return s;
+  return s
+    .toString()
+    .toLowerCase()
+    .trim()
+    .split(/\s+/)
+    .map((w, i) => (i === 0 || !MINOR_WORDS.has(w) ? w[0].toUpperCase() + w.slice(1) : w))
+    .join(" ");
+}
+
 export const BADGES = {
   en_stock: {
     label: "Disponible",

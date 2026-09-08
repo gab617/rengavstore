@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import useCart from "../../hooks/useCart";
 import { publicUrl } from "../../lib/storefront";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 import AvailabilityBadge from "./AvailabilityBadge";
 import SizeChips from "./SizeChips";
 
@@ -96,7 +96,7 @@ export default function ProductModal({ p, onClose, theme }) {
               {p.marca || "Producto"}
             </p>
             <h3 className="truncate font-display text-lg sm:text-xl font-semibold tracking-tight">
-              {p.nombre}
+              {normalizeProductName(p.nombre)}
             </h3>
           </div>
           <button

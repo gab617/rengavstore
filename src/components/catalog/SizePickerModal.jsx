@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import useCart from "../../hooks/useCart";
 import { publicUrl } from "../../lib/storefront";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 
 export default function SizePickerModal({ p, onClose, theme }) {
   const [selected, setSelected] = useState(null);
@@ -98,7 +98,7 @@ export default function SizePickerModal({ p, onClose, theme }) {
                 Seleccionar talle
               </p>
               <p className="mt-1 text-base font-semibold text-[var(--color-texto)] leading-snug">
-                {p.nombre}
+                {normalizeProductName(p.nombre)}
               </p>
               {p.marca && (
                 <p className="mt-0.5 text-sm font-medium text-[var(--color-secondary)]">

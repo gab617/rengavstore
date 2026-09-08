@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { publicUrl } from "../../lib/storefront";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 import useCart from "../../hooks/useCart";
 import AvailabilityBadge from "./AvailabilityBadge";
 import SizeChips from "./SizeChips";
@@ -120,7 +120,7 @@ export default function ProductCard({ p, onOpen, theme }) {
             </p>
           )}
           <h3 className="mt-0.5 font-medium leading-snug sm:line-clamp-2">
-            {p.nombre}
+            {normalizeProductName(p.nombre)}
           </h3>
 
           <div className="mt-2">
