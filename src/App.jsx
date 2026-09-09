@@ -5,7 +5,7 @@ import Storefront from "./components/Storefront";
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<SlugPicker />} />
+      <Route path="/" element={<SlugPicker logo="/logostore.jpg" />} />
       <Route path="/:slug" element={<Storefront />} />
     </Routes>
   );

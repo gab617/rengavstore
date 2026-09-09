@@ -5,11 +5,13 @@ import { publicUrl } from "../../lib/storefront";
 import { formatPrice, normalizeProductName } from "../../lib/tienda";
 import AvailabilityBadge from "./AvailabilityBadge";
 import SizeChips from "./SizeChips";
+import ImageLightbox from "./ImageLightbox";
 
 export default function ProductModal({ p, onClose, theme }) {
   const imagenes = (p.imagenes || []).filter(Boolean);
   const [sel, setSel] = useState(0);
   const [imgError, setImgError] = useState(false);
+  const [lightbox, setLightbox] = useState(false);
   const [qty, setQty] = useState(1);
   const [added, setAdded] = useState(false);
   const [selectedTalle, setSelectedTalle] = useState(null);
@@ -24,6 +26,7 @@ export default function ProductModal({ p, onClose, theme }) {
   useEffect(() => {
     setSel(0);
     setImgError(false);
+    setLightbox(false);
     setQty(1);
     setAdded(false);
     setSelectedTalle(null);
@@ -37,6 +40,7 @@ export default function ProductModal({ p, onClose, theme }) {
   }, [added]);
 
   useEffect(() => {
+    if (lightbox) return;
     document.body.style.overflow = "hidden";
     const onKey = (e) => {
       if (e.key === "Escape") onClose();
@@ -51,7 +55,7 @@ export default function ProductModal({ p, onClose, theme }) {
       document.body.style.overflow = "";
       window.removeEventListener("keydown", onKey);
     };
-  }, [onClose, imagenes.length]);
+  }, [onClose, imagenes.length, lightbox]);
 
   const primary = theme?.primary || "#2563eb";
   const img = imagenes[sel] ? publicUrl(imagenes[sel]) : null;
@@ -72,13 +76,15 @@ export default function ProductModal({ p, onClose, theme }) {
     setAdded(true);
   };
 
-  return createPortal(
-    <div
-      className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-6 animate-fade-in"
-      onClick={(e) => {
-        if (e.target === e.currentTarget) onClose();
-      }}
-    >
+  return (
+    <>
+      {createPortal(
+        <div
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm p-2 sm:p-6 animate-fade-in"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) onClose();
+          }}
+        >
       <div
         className="relative flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-[var(--radio)] bg-[var(--color-tarjeta)] shadow-2xl animate-scale-in"
         style={theme?.vars}
@@ -112,12 +118,34 @@ export default function ProductModal({ p, onClose, theme }) {
           <div className="p-4 pb-2 sm:p-6 sm:pb-3">
             <div className="relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft sm:aspect-[4/3]">
               {img && !imgError ? (
-                <img
-                  src={img}
-                  alt={p.nombre}
-                  className="h-full w-full object-contain"
-                  onError={() => setImgError(true)}
-                />
+                <button
+                  onClick={() => setLightbox(true)}
+                  className="group/img absolute inset-0 cursor-zoom-in"
+                  aria-label="Ver imagen en pantalla completa"
+                >
+                  <img
+                    src={img}
+                    alt={p.nombre}
+                    className="h-full w-full object-contain"
+                    onError={() => setImgError(true)}
+                  />
+                  <span className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-black/50 text-white shadow-md backdrop-blur transition-all duration-200 hover:bg-black/70 active:scale-95 sm:opacity-0 sm:transition-opacity sm:group-hover/img:opacity-100">
+                    <svg
+                      className="h-4 w-4"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M8 3H5a2 2 0 0 0-2 2v3" />
+                      <path d="M21 8V5a2 2 0 0 0-2-2h-3" />
+                      <path d="M3 16v3a2 2 0 0 0 2 2h3" />
+                      <path d="M16 21h3a2 2 0 0 0 2-2v-3" />
+                    </svg>
+                  </span>
+                </button>
               ) : (
                 <span className="flex flex-col items-center gap-2">
                   <svg
@@ -142,14 +170,20 @@ export default function ProductModal({ p, onClose, theme }) {
               {imagenes.length > 1 && !imgError && (
                 <>
                   <button
-                    onClick={prev}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      prev();
+                    }}
                     className="absolute left-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md backdrop-blur transition-colors hover:bg-white"
                     aria-label="Anterior"
                   >
                     ←
                   </button>
                   <button
-                    onClick={next}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      next();
+                    }}
                     className="absolute right-3 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full bg-white/80 text-gray-800 shadow-md backdrop-blur transition-colors hover:bg-white"
                     aria-label="Siguiente"
                   >
@@ -330,7 +364,19 @@ export default function ProductModal({ p, onClose, theme }) {
         </div>
       </div>
     </div>,
-    document.body,
+        document.body,
+      )}
+
+      {lightbox && (
+        <ImageLightbox
+          p={p}
+          imagenes={imagenes}
+          initial={sel}
+          onClose={() => setLightbox(false)}
+          onNavigate={setSel}
+        />
+      )}
+    </>
   );
 }
 
