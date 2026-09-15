@@ -21,6 +21,58 @@ export function shortOrderId(id) {
   return `#${id.replace(/-/g, "").slice(0, 6).toUpperCase()}`;
 }
 
+const LAST_ORDER_PREFIX = "comercio_tienda:last_order";
+const LAST_ORDER_VERSION = 1;
+
+function lastOrderKey(slug) {
+  return `${LAST_ORDER_PREFIX}:${slug}`;
+}
+
+export function saveLastOrder(slug, { id, total, metodoPago }) {
+  if (typeof window === "undefined" || !slug || !id) return;
+  try {
+    window.localStorage.setItem(
+      lastOrderKey(slug),
+      JSON.stringify({
+        v: LAST_ORDER_VERSION,
+        id,
+        total: Number(total) || null,
+        metodoPago: metodoPago || null,
+        fecha: new Date().toISOString(),
+      }),
+    );
+  } catch {
+    /* almacenamiento no disponible */
+  }
+}
+
+export function loadLastOrder(slug) {
+  if (typeof window === "undefined" || !slug) return null;
+  try {
+    const raw = window.localStorage.getItem(lastOrderKey(slug));
+    if (!raw) return null;
+    const parsed = JSON.parse(raw);
+    if (parsed?.v !== LAST_ORDER_VERSION || !parsed?.id) return null;
+    return {
+      id: parsed.id,
+      total: parsed.total,
+      metodoPago: parsed.metodoPago,
+      fecha: parsed.fecha,
+    };
+  } catch {
+    return null;
+  }
+}
+
+export function clearLastOrder(slug) {
+  if (typeof window === "undefined" || !slug) return;
+  try {
+    window.localStorage.removeItem(lastOrderKey(slug));
+  } catch {
+    /* almacenamiento no disponible */
+  }
+}
+
 export function buildWhatsAppMessage({
   sucursalNombre,
   pedido,

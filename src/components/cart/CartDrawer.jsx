@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import useCart from "../../hooks/useCart";
 import { formatPrice } from "../../lib/tienda";
+import { clearLastOrder, loadLastOrder, saveLastOrder, shortOrderId } from "../../lib/pedidos";
 import CartLineItem from "./CartLineItem";
 import CheckoutForm from "./CheckoutForm";
 import PedidoConfirmado from "./PedidoConfirmado";
@@ -20,6 +21,7 @@ export default function CartDrawer({
   const [view, setView] = useState("carrito");
   const [resultado, setResultado] = useState(null);
   const [confirmingClear, setConfirmingClear] = useState(false);
+  const [lastOrder, setLastOrder] = useState(() => loadLastOrder(slug));
   const [rendered, setRendered] = useState(open);
   const [visible, setVisible] = useState(false);
 
@@ -93,6 +95,13 @@ export default function CartDrawer({
             onBack={() => setView("carrito")}
             onClose={onClose}
             onSuccess={(res) => {
+              saveLastOrder(slug, {
+                id: res.pedido.id,
+                total: res.subtotal,
+                metodoPago: res.metodoPago,
+              });
+              setLastOrder(loadLastOrder(slug));
+              clear();
               setResultado(res);
               setView("exito");
             }}
@@ -197,6 +206,15 @@ export default function CartDrawer({
                     Explorá el catálogo y agregá productos.
                   </p>
                 </div>
+                {lastOrder && (
+                  <LastOrderNote
+                    order={lastOrder}
+                    onClear={() => {
+                      clearLastOrder(slug);
+                      setLastOrder(null);
+                    }}
+                  />
+                )}
                 <button
                   onClick={onClose}
                   className="mt-1 rounded-[var(--radio)] px-5 py-2.5 text-xs font-semibold text-[var(--color-primary-texto)] shadow-md transition-all hover:opacity-90 active:scale-[0.98]"
@@ -239,5 +257,86 @@ export default function CartDrawer({
       </aside>
     </div>,
     document.body,
+  );
+}
+
+function LastOrderNote({ order, onClear }) {
+  const [copied, setCopied] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const orden = shortOrderId(order.id);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(orden);
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = orden;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <div className="flex w-full items-center gap-3 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 text-left">
+      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
+        ✓
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
+          Tu último pedido
+        </p>
+        <p className="truncate text-sm font-bold text-[var(--color-texto)]">
+          {orden}
+          {order.total != null && (
+            <span className="ml-1 font-medium text-[var(--color-secondary)]">
+              · {formatPrice(order.total)}
+            </span>
+          )}
+        </p>
+      </div>
+      <button
+        type="button"
+        onClick={copy}
+        className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition-all active:scale-95 ${
+          copied
+            ? "bg-green-100 text-green-700"
+            : "text-[var(--color-primary-texto)] hover:opacity-90"
+        }`}
+        style={copied ? undefined : { background: "var(--color-primary)" }}
+      >
+        {copied ? "✓ Copiado" : "⧉ Copiar"}
+      </button>
+      {confirming ? (
+        <span className="flex shrink-0 items-center gap-1.5">
+          <button
+            type="button"
+            onClick={onClear}
+            className="rounded-lg bg-red-500 px-2.5 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-red-600 active:scale-95"
+          >
+            Eliminar
+          </button>
+          <button
+            type="button"
+            onClick={() => setConfirming(false)}
+            className="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-[var(--color-secondary)] transition-colors hover:surface-soft"
+          >
+            Cancelar
+          </button>
+        </span>
+      ) : (
+        <button
+          type="button"
+          onClick={() => setConfirming(true)}
+          aria-label="Eliminar último pedido"
+          className="shrink-0 rounded-lg p-2 text-base leading-none text-[var(--color-secondary)] transition-colors hover:bg-red-50 hover:text-red-500"
+        >
+          ✕
+        </button>
+      )}
+    </div>
   );
 }

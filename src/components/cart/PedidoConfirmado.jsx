@@ -94,14 +94,20 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
           <p className="font-display text-lg font-semibold text-[var(--color-texto)]">
             ¡Gracias {cliente.nombre.split(" ")[0]}!
           </p>
-          <p className="mt-1 text-sm text-[var(--color-secondary)]">
-            Tu pedido quedó registrado. Número{" "}
-            <span className="font-bold text-[var(--color-texto)]">
+          <div className="mt-2 inline-flex items-center gap-2 rounded-full border border-[var(--color-borde)] surface-soft px-3 py-1.5">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
+              Número
+            </span>
+            <span className="select-all font-mono text-sm font-bold text-[var(--color-texto)]">
               {shortOrderId(pedido.id)}
             </span>
-          </p>
-          <p className="mt-1 text-xs font-medium text-[var(--color-secondary)]">
-            Pagás <span className="text-[var(--color-texto)]">{metodoLabel.toLowerCase()}</span>
+            <CopyFieldButton value={shortOrderId(pedido.id)} />
+          </div>
+          <p className="mt-1.5 text-xs font-medium text-[var(--color-secondary)]">
+            Pagás{" "}
+            <span className="text-[var(--color-texto)]">
+              {metodoLabel.toLowerCase()}
+            </span>
           </p>
         </div>
 
@@ -225,5 +231,40 @@ export default function PedidoConfirmado({ resultado, settings, sucursalNombre, 
         </p>
       </div>
     </div>
+  );
+}
+
+function CopyFieldButton({ value }) {
+  const [copied, setCopied] = useState(false);
+
+  const copy = async () => {
+    try {
+      await navigator.clipboard.writeText(value);
+    } catch {
+      const el = document.createElement("textarea");
+      el.value = value;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand("copy");
+      document.body.removeChild(el);
+    }
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={copy}
+      aria-label="Copiar número de pedido"
+      className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-xs font-bold shadow-sm transition-all active:scale-90 ${
+        copied
+          ? "bg-green-100 text-green-700 shadow-none"
+          : "text-[var(--color-primary-texto)] hover:opacity-90"
+      }`}
+      style={copied ? undefined : { background: "var(--color-primary)" }}
+    >
+      {copied ? "✓" : "⧉"}
+    </button>
   );
 }
