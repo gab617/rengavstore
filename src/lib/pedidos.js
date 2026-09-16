@@ -22,10 +22,22 @@ export function shortOrderId(id) {
 }
 
 const LAST_ORDER_PREFIX = "comercio_tienda:last_order";
-const LAST_ORDER_VERSION = 1;
+const LAST_ORDER_VERSION = 2;
+const MAX_ORDERS = 3;
 
 function lastOrderKey(slug) {
   return `${LAST_ORDER_PREFIX}:${slug}`;
+}
+
+function normalizeOrderEntry(entry) {
+  if (!entry?.id) return null;
+  return {
+    id: entry.id,
+    total: entry.total != null ? Number(entry.total) : null,
+    metodoPago: entry.metodoPago || null,
+    items: Array.isArray(entry.items) ? entry.items : [],
+    fecha: entry.fecha || null,
+  };
 }
 
 export function saveLastOrder(slug, { id, total, metodoPago, items }) {
@@ -38,46 +50,74 @@ export function saveLastOrder(slug, { id, total, metodoPago, items }) {
         precio_unitario: Number(i.precio_unitario) || 0,
       }))
     : [];
+  const nuevo = normalizeOrderEntry({
+    id,
+    total: Number(total) || null,
+    metodoPago: metodoPago || null,
+    items: resumenItems,
+    fecha: new Date().toISOString(),
+  });
+  if (!nuevo) return;
   try {
+    const previos = loadLastOrders(slug).filter((o) => o.id !== id);
+    const historial = [nuevo, ...previos].slice(0, MAX_ORDERS);
     window.localStorage.setItem(
       lastOrderKey(slug),
-      JSON.stringify({
-        v: LAST_ORDER_VERSION,
-        id,
-        total: Number(total) || null,
-        metodoPago: metodoPago || null,
-        items: resumenItems,
-        fecha: new Date().toISOString(),
-      }),
+      JSON.stringify({ v: LAST_ORDER_VERSION, pedidos: historial }),
     );
   } catch {
     /* almacenamiento no disponible */
   }
 }
 
-export function loadLastOrder(slug) {
-  if (typeof window === "undefined" || !slug) return null;
+export function loadLastOrders(slug) {
+  if (typeof window === "undefined" || !slug) return [];
   try {
     const raw = window.localStorage.getItem(lastOrderKey(slug));
-    if (!raw) return null;
+    if (!raw) return [];
     const parsed = JSON.parse(raw);
-    if (parsed?.v !== LAST_ORDER_VERSION || !parsed?.id) return null;
-    return {
-      id: parsed.id,
-      total: parsed.total,
-      metodoPago: parsed.metodoPago,
-      items: Array.isArray(parsed.items) ? parsed.items : [],
-      fecha: parsed.fecha,
-    };
+    if (parsed?.v === 2 && Array.isArray(parsed.pedidos)) {
+      return parsed.pedidos
+        .map(normalizeOrderEntry)
+        .filter(Boolean)
+        .slice(0, MAX_ORDERS);
+    }
+    if (parsed?.v === 1 && parsed?.id) {
+      const migrado = normalizeOrderEntry(parsed);
+      if (migrado) {
+        try {
+          window.localStorage.setItem(
+            lastOrderKey(slug),
+            JSON.stringify({ v: LAST_ORDER_VERSION, pedidos: [migrado] }),
+          );
+        } catch {
+          /* almacenamiento no disponible */
+        }
+        return [migrado];
+      }
+    }
+    return [];
   } catch {
-    return null;
+    return [];
   }
 }
 
-export function clearLastOrder(slug) {
+export function loadLastOrder(slug) {
+  return loadLastOrders(slug)[0] ?? null;
+}
+
+export function clearLastOrder(slug, id) {
   if (typeof window === "undefined" || !slug) return;
   try {
-    window.localStorage.removeItem(lastOrderKey(slug));
+    const restantes = loadLastOrders(slug).filter((o) => o.id !== id);
+    if (restantes.length === 0) {
+      window.localStorage.removeItem(lastOrderKey(slug));
+      return;
+    }
+    window.localStorage.setItem(
+      lastOrderKey(slug),
+      JSON.stringify({ v: LAST_ORDER_VERSION, pedidos: restantes }),
+    );
   } catch {
     /* almacenamiento no disponible */
   }
