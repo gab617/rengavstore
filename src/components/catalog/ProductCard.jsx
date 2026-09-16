@@ -114,11 +114,12 @@ export default function ProductCard({ p, onOpen, theme }) {
         )}
 
         <div className="flex min-w-0 flex-1 flex-col min-h-0 p-3 sm:p-4">
-          {p.marca && (
-            <p className="text-[10px] font-semibold uppercase tracking-wider" style={{ color: "var(--color-secondary)" }}>
-              {p.marca}
-            </p>
-          )}
+          <p
+            className="h-3.5 text-[10px] font-semibold uppercase tracking-wider"
+            style={{ color: p.marca ? "var(--color-secondary)" : "transparent" }}
+          >
+            {p.marca || "\u00A0"}
+          </p>
           <h3 className="mt-0.5 font-medium leading-snug sm:line-clamp-2">
             {normalizeProductName(p.nombre)}
           </h3>

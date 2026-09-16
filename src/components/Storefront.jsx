@@ -17,11 +17,13 @@ import CatalogEmpty from "./catalog/CatalogEmpty";
 import CatalogSkeleton from "./catalog/CatalogSkeleton";
 import FeaturedSection from "./catalog/FeaturedSection";
 import ProductGrid from "./catalog/ProductGrid";
+import CategorySections from "./catalog/CategorySections";
 import ProductModal from "./catalog/ProductModal";
 import CartDrawer from "./cart/CartDrawer";
 import CartBadge from "./cart/CartBadge";
 import WhatsAppButton from "./layout/WhatsAppButton";
 import CategoryBottomSheet from "./catalog/CategoryBottomSheet";
+import CategoryFab from "./catalog/CategoryFab";
 
 function LoadingScreen() {
   return (
@@ -171,14 +173,22 @@ function StorefrontView({ slug }) {
                   </div>
                 )}
 
-                <SubcategoryChips
-                  subcategorias={subcategorias}
-                  subcategoria={subcategoria}
-                  setSubcategoria={setSubcategoria}
-                />
+                {categoria !== null && (
+                  <SubcategoryChips
+                    subcategorias={subcategorias}
+                    subcategoria={subcategoria}
+                    setSubcategoria={setSubcategoria}
+                  />
+                )}
 
                 {filtrados.length === 0 ? (
                   <CatalogEmpty q={q} onClear={q ? () => setQ("") : undefined} />
+                ) : categoria === null ? (
+                  <CategorySections
+                    productos={filtrados}
+                    onOpen={setProductoActivo}
+                    theme={theme}
+                  />
                 ) : (
                   <ProductGrid productos={filtrados} onOpen={setProductoActivo} theme={theme} />
                 )}
@@ -224,6 +234,10 @@ function StorefrontView({ slug }) {
             primary={theme.primary}
             onClick={() => setCartOpen(true)}
           />
+        )}
+
+        {!catSheetOpen && !cartOpen && (
+          <CategoryFab onClick={() => setCatSheetOpen(true)} />
         )}
 
         <WhatsAppButton telefono={set?.telefono_whatsapp} />

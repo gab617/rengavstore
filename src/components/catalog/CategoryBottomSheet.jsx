@@ -22,8 +22,8 @@ export default function CategoryBottomSheet({
     if (!query.trim()) return categorias;
     const q = query.toLowerCase();
     return categorias.filter((c) =>
-      c.nombre.toLowerCase().includes(q) ||
-      c.id.toLowerCase().includes(q)
+      String(c.nombre ?? "").toLowerCase().includes(q) ||
+      String(c.id ?? "").toLowerCase().includes(q)
     );
   }, [categorias, query]);
 

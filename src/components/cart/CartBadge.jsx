@@ -5,11 +5,11 @@ export default function CartBadge({ count, onClick, primary = "#2563eb" }) {
     <button
       onClick={onClick}
       aria-label={`Abrir carrito de compras (${label})`}
-      className="fixed bottom-5 right-5 z-40 flex h-14 w-14 items-center justify-center rounded-full text-[var(--color-primary-texto)] shadow-xl ring-4 ring-white/60 transition-all hover:opacity-90 hover:shadow-2xl active:scale-95"
+      className="fixed bottom-5 right-5 z-40 flex h-12 w-12 items-center justify-center rounded-full text-[var(--color-primary-texto)] shadow-xl ring-4 ring-white/60 transition-all hover:opacity-90 hover:shadow-2xl active:scale-95"
       style={{ background: primary }}
     >
       <svg
-        className="h-6 w-6"
+        className="h-5 w-5"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"

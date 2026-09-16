@@ -7,7 +7,7 @@ export default function SubcategoryChips({
 }) {
   if (subcategorias.length <= 1) return null;
   return (
-    <div className="no-scrollbar -mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1.5 mb-4">
+    <div className="no-scrollbar -mx-4 mb-4 flex gap-1.5 overflow-x-auto px-4 pb-1.5 md:mx-0 md:flex-wrap md:overflow-visible md:px-0">
       <Chip
         active={subcategoria === null}
         onClick={() => setSubcategoria(null)}

@@ -3,7 +3,6 @@ export default function SizeChips({ sizes = [], selected, onSelect }) {
 
   const selectable = typeof onSelect === "function";
   const count = sizes.length;
-  // Ancho igual para todos: 100% / count, con min y max razonables
   const chipWidth = `calc((100% - ${(count - 1) * 4}px) / ${count})`;
 
   return (
@@ -19,24 +18,17 @@ export default function SizeChips({ sizes = [], selected, onSelect }) {
             ? "bg-amber-400"
             : "bg-green-500";
 
-        const textCls = outOfStock
-          ? "text-red-400"
-          : lowStock
-            ? "text-amber-500"
-            : "text-green-600";
-
-        const hoverTextCls = selectable && isSelected ? "text-[var(--color-primary-texto)]" : textCls;
         const statusLabel = outOfStock ? "Sin stock" : lowStock ? "¡Quedan pocas!" : "Disponible";
 
         const chipCls = selectable
-          ? `group relative rounded border px-1 py-1.5 text-center text-[10px] sm:text-xs transition-all ${
+          ? `group relative overflow-hidden rounded border px-1 py-1.5 text-center text-[10px] sm:text-xs transition-all ${
               isSelected
                 ? "border-[var(--color-primary)] bg-[var(--color-primary)]/10 ring-1 ring-[var(--color-primary)]"
                 : outOfStock
                   ? "border-[var(--color-borde)] surface-soft opacity-40 cursor-not-allowed"
                   : "border-[color-mix(in_srgb,var(--color-texto)_35%,transparent)] surface-soft cursor-pointer hover:border-[color-mix(in_srgb,var(--color-texto)_65%,transparent)] hover:shadow-sm"
             }`
-          : "group relative rounded border border-[color-mix(in_srgb,var(--color-texto)_28%,transparent)] surface-soft px-1 py-1.5 text-center text-[10px] sm:text-xs";
+          : "group relative rounded border border-[color-mix(in_srgb,var(--color-texto)_28%,transparent)] surface-soft px-1 py-1.5 text-center text-[10px] sm:text-xs overflow-hidden";
 
         const Tag = selectable && !outOfStock ? "button" : "span";
 
@@ -56,25 +48,39 @@ export default function SizeChips({ sizes = [], selected, onSelect }) {
           >
             <div className="flex flex-col items-center gap-0.5">
               <span className="font-medium text-[var(--color-secondary)] leading-none">{s.nombre}</span>
-              <span className={`relative flex h-3.5 w-full items-center justify-center leading-none ${textCls}`}>
-                <span
-                  aria-hidden="true"
-                  className={`h-1.5 w-1.5 rounded-full transition-all duration-200 ${dotCls} ${
-                    outOfStock ? "opacity-60" : "sm:group-hover:scale-0 sm:group-hover:opacity-0"
-                  } ${lowStock || outOfStock ? "hidden sm:block" : "block"}`}
-                />
-                <span
-                  className={`absolute inset-0 flex items-center justify-center text-[8.5px] font-semibold tracking-tight whitespace-nowrap transition-all duration-200 sm:text-[9px] ${
-                    outOfStock
-                      ? "opacity-100"
-                      : lowStock
-                        ? `${hoverTextCls} opacity-100 scale-100 sm:opacity-0 sm:scale-75 sm:group-hover:scale-100 sm:group-hover:opacity-100`
-                        : `opacity-0 scale-75 ${hoverTextCls} group-hover:scale-100 group-hover:opacity-100`
-                  }`}
-                >
-                  {statusLabel}
+
+              {selectable ? (
+                <span className="relative flex h-3.5 w-full items-center justify-center leading-none">
+                  <span
+                    aria-hidden="true"
+                    className={`h-1.5 w-1.5 rounded-full transition-all duration-200 ${dotCls} ${
+                      outOfStock ? "opacity-60" : "sm:group-hover:scale-0 sm:group-hover:opacity-0"
+                    } ${lowStock || outOfStock ? "hidden sm:block" : "block"}`}
+                  />
+                  <span
+                    className={`absolute inset-0 flex items-center justify-center text-[8.5px] font-semibold tracking-tight whitespace-nowrap transition-all duration-200 sm:text-[9px] ${
+                      outOfStock
+                        ? `${isSelected ? "text-[var(--color-primary-texto)]" : "text-red-400"} opacity-100 sm:opacity-60`
+                        : lowStock
+                          ? `hidden sm:flex sm:opacity-0 sm:scale-75 sm:group-hover:scale-100 sm:group-hover:opacity-100 ${
+                              isSelected ? "text-[var(--color-primary-texto)]" : "text-amber-500"
+                            }`
+                          : `hidden sm:flex sm:opacity-0 sm:scale-75 sm:group-hover:scale-100 sm:group-hover:opacity-100 ${
+                              isSelected ? "text-[var(--color-primary-texto)]" : "text-green-600"
+                            }`
+                    }`}
+                  >
+                    {statusLabel}
+                  </span>
                 </span>
-              </span>
+              ) : (
+                <span
+                  aria-label={statusLabel}
+                  className={`h-1.5 w-1.5 rounded-full ${dotCls} ${
+                    outOfStock ? "opacity-60" : ""
+                  }`}
+                />
+              )}
             </div>
           </Tag>
         );

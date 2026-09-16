@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import useCart from "../../hooks/useCart";
-import { formatPrice } from "../../lib/tienda";
+import { formatPrice, normalizeProductName } from "../../lib/tienda";
 import { clearLastOrder, loadLastOrder, saveLastOrder, shortOrderId } from "../../lib/pedidos";
 import CartLineItem from "./CartLineItem";
 import CheckoutForm from "./CheckoutForm";
@@ -99,6 +99,7 @@ export default function CartDrawer({
                 id: res.pedido.id,
                 total: res.subtotal,
                 metodoPago: res.metodoPago,
+                items: res.items,
               });
               setLastOrder(loadLastOrder(slug));
               clear();
@@ -263,7 +264,16 @@ export default function CartDrawer({
 function LastOrderNote({ order, onClear }) {
   const [copied, setCopied] = useState(false);
   const [confirming, setConfirming] = useState(false);
+  const [open, setOpen] = useState(false);
   const orden = shortOrderId(order.id);
+  const items = order.items || [];
+  const fecha = order.fecha
+    ? new Date(order.fecha).toLocaleDateString("es-AR", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : null;
 
   const copy = async () => {
     try {
@@ -281,61 +291,129 @@ function LastOrderNote({ order, onClear }) {
   };
 
   return (
-    <div className="flex w-full items-center gap-3 rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft p-3 text-left">
-      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
-        ✓
-      </span>
-      <div className="min-w-0 flex-1">
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
-          Tu último pedido
-        </p>
-        <p className="truncate text-sm font-bold text-[var(--color-texto)]">
-          {orden}
-          {order.total != null && (
-            <span className="ml-1 font-medium text-[var(--color-secondary)]">
-              · {formatPrice(order.total)}
-            </span>
-          )}
-        </p>
-      </div>
+    <div className="w-full overflow-hidden rounded-[var(--radio)] border border-[var(--color-borde)] surface-soft text-left">
       <button
         type="button"
-        onClick={copy}
-        className={`shrink-0 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition-all active:scale-95 ${
-          copied
-            ? "bg-green-100 text-green-700"
-            : "text-[var(--color-primary-texto)] hover:opacity-90"
-        }`}
-        style={copied ? undefined : { background: "var(--color-primary)" }}
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center gap-3 p-3 transition-colors hover:surface-soft"
+        aria-expanded={open}
       >
-        {copied ? "✓ Copiado" : "⧉ Copiar"}
-      </button>
-      {confirming ? (
-        <span className="flex shrink-0 items-center gap-1.5">
-          <button
-            type="button"
-            onClick={onClear}
-            className="rounded-lg bg-red-500 px-2.5 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-red-600 active:scale-95"
-          >
-            Eliminar
-          </button>
-          <button
-            type="button"
-            onClick={() => setConfirming(false)}
-            className="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-[var(--color-secondary)] transition-colors hover:surface-soft"
-          >
-            Cancelar
-          </button>
+        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-green-100 text-green-600">
+          ✓
         </span>
-      ) : (
-        <button
-          type="button"
-          onClick={() => setConfirming(true)}
-          aria-label="Eliminar último pedido"
-          className="shrink-0 rounded-lg p-2 text-base leading-none text-[var(--color-secondary)] transition-colors hover:bg-red-50 hover:text-red-500"
+        <div className="min-w-0 flex-1">
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-[var(--color-secondary)]">
+            Tu último pedido
+            {fecha && (
+              <span className="ml-1 normal-case tracking-normal">· {fecha}</span>
+            )}
+          </p>
+          <p className="truncate text-sm font-bold text-[var(--color-texto)]">
+            {orden}
+            {order.total != null && (
+              <span className="ml-1 font-medium text-[var(--color-secondary)]">
+                · {formatPrice(order.total)}
+              </span>
+            )}
+          </p>
+        </div>
+        <svg
+          className={`h-4 w-4 shrink-0 text-[var(--color-secondary)] transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
         >
-          ✕
-        </button>
+          <path d="M6 9l6 6 6-6" />
+        </svg>
+      </button>
+
+      {open && (
+        <div className="space-y-3 border-t border-[var(--color-borde)] px-3 py-3">
+          {items.length > 0 ? (
+            <ul className="space-y-1.5">
+              {items.map((i, idx) => (
+                <li
+                  key={`${i.nombre}${i.talle || ""}${idx}`}
+                  className="flex items-baseline justify-between gap-3 text-xs"
+                >
+                  <span className="min-w-0 text-[var(--color-texto)]">
+                    <span className="font-medium">{normalizeProductName(i.nombre)}</span>
+                    {i.talle && (
+                      <span className="ml-1 text-[var(--color-secondary)]">
+                        · Talle {i.talle}
+                      </span>
+                    )}
+                    <span className="text-[var(--color-secondary)]">
+                      {" "}x{i.cantidad}
+                    </span>
+                  </span>
+                  <span className="shrink-0 font-semibold tabular-nums text-[var(--color-texto)]">
+                    {formatPrice(i.precio_unitario * i.cantidad)}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-xs text-[var(--color-secondary)]">
+              No hay detalle de productos guardado.
+            </p>
+          )}
+
+          {order.total != null && (
+            <div className="flex items-baseline justify-between border-t border-[var(--color-borde)] pt-2 text-sm">
+              <span className="font-medium text-[var(--color-texto)]">Total</span>
+              <span className="font-bold tabular-nums text-[var(--color-texto)]">
+                {formatPrice(order.total)}
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={copy}
+              className={`flex-1 rounded-lg px-2.5 py-1.5 text-[11px] font-bold transition-all active:scale-95 ${
+                copied
+                  ? "bg-green-100 text-green-700"
+                  : "text-[var(--color-primary-texto)] hover:opacity-90"
+              }`}
+              style={copied ? undefined : { background: "var(--color-primary)" }}
+            >
+              {copied ? "✓ Copiado" : "⧉ Copiar número de pedido"}
+            </button>
+            {confirming ? (
+              <span className="flex shrink-0 items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={onClear}
+                  className="rounded-lg bg-red-500 px-2.5 py-1.5 text-[11px] font-bold text-white transition-colors hover:bg-red-600 active:scale-95"
+                >
+                  Eliminar
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirming(false)}
+                  className="rounded-lg px-2 py-1.5 text-[11px] font-semibold text-[var(--color-secondary)] transition-colors hover:surface-soft"
+                >
+                  Cancelar
+                </button>
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => setConfirming(true)}
+                className="shrink-0 rounded-lg px-3 py-1.5 text-[11px] font-semibold text-[var(--color-secondary)] transition-colors hover:bg-red-50 hover:text-red-500"
+              >
+                ✕ Eliminar
+              </button>
+            )}
+          </div>
+        </div>
       )}
     </div>
   );

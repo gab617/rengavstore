@@ -28,8 +28,16 @@ function lastOrderKey(slug) {
   return `${LAST_ORDER_PREFIX}:${slug}`;
 }
 
-export function saveLastOrder(slug, { id, total, metodoPago }) {
+export function saveLastOrder(slug, { id, total, metodoPago, items }) {
   if (typeof window === "undefined" || !slug || !id) return;
+  const resumenItems = Array.isArray(items)
+    ? items.map((i) => ({
+        nombre: String(i.nombre ?? ""),
+        talle: i.talle || null,
+        cantidad: Math.max(1, Math.floor(Number(i.cantidad) || 1)),
+        precio_unitario: Number(i.precio_unitario) || 0,
+      }))
+    : [];
   try {
     window.localStorage.setItem(
       lastOrderKey(slug),
@@ -38,6 +46,7 @@ export function saveLastOrder(slug, { id, total, metodoPago }) {
         id,
         total: Number(total) || null,
         metodoPago: metodoPago || null,
+        items: resumenItems,
         fecha: new Date().toISOString(),
       }),
     );
@@ -57,6 +66,7 @@ export function loadLastOrder(slug) {
       id: parsed.id,
       total: parsed.total,
       metodoPago: parsed.metodoPago,
+      items: Array.isArray(parsed.items) ? parsed.items : [],
       fecha: parsed.fecha,
     };
   } catch {
