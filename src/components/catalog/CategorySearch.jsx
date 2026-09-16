@@ -14,18 +14,7 @@ export default function CategorySearch({
     inputRef.current?.focus();
   }, []);
 
-  if (!categorias?.length) {
-    return (
-      <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
-        <svg className="h-12 w-12 text-[var(--color-borde)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-        </svg>
-        <p className="mt-3 text-sm font-medium text-[var(--color-secondary)]">
-          {query ? "Sin coincidencias" : "No hay categorías"}
-        </p>
-      </div>
-    );
-  }
+  const sinCoincidencias = !categorias?.length;
 
   return (
     <div className="flex flex-col">
@@ -60,8 +49,26 @@ export default function CategorySearch({
         </label>
       </div>
 
-      <ul className="flex-1 overflow-y-auto divide-y divide-[var(--color-borde)]" role="listbox" aria-label="Categorías">
-        {categorias.map((cat) => {
+      {sinCoincidencias ? (
+        <div className="flex flex-col items-center justify-center py-12 px-4 text-center">
+          <svg className="h-12 w-12 text-[var(--color-borde)]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          <p className="mt-3 text-sm font-medium text-[var(--color-secondary)]">
+            {query ? "Sin coincidencias" : "No hay categorías"}
+          </p>
+          {query && (
+            <button
+              onClick={() => onChange("")}
+              className="mt-3 rounded-full border border-[var(--color-borde)] surface-soft px-4 py-2 text-xs font-semibold text-[var(--color-secondary)] transition-colors hover:text-[var(--color-texto)] active:scale-95"
+            >
+              Limpiar búsqueda
+            </button>
+          )}
+        </div>
+      ) : (
+        <ul className="flex-1 overflow-y-auto divide-y divide-[var(--color-borde)]" role="listbox" aria-label="Categorías">
+          {categorias.map((cat) => {
           const isActive = activeCategoryId === cat.id;
           return (
             <li key={cat.id}>
@@ -104,7 +111,8 @@ export default function CategorySearch({
             </li>
           );
         })}
-      </ul>
+        </ul>
+      )}
     </div>
   );
 }
